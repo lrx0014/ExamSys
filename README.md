@@ -1,7 +1,12 @@
 ExamSys （DEMO）
 ===========================
 目前程序处于demo阶段, 这是本人独立编写的第一个比较大型的项目, 完全出于学习目的和个人兴趣, 工程经验不足, 设计还有许多不如意的地方, 以后会慢慢改进, 慢慢完善这个系统, 使其可以满足大部分在线测试的需求. <br>
-开发使用的是WampServer 3.1.0 (php 5.6.31 + mysql 5.7.19) <br>
+
+  Author  | Email
+  ------------- | -------------
+ Ryann Li  | lrx0014@hotmail.com
+
+开发使用的是 **WampServer 3.1.0 (php 5.6.31 + mysql 5.7.19)** <br>
 引用了JQuery和Bootstrap框架 <br>
 
 Change Log
