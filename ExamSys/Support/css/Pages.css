@@ -1,0 +1,26 @@
+.page {
+    text-align: center;
+    margin: 10px 0 -20px 0;
+}
+
+.page_Ques {
+    text-align: center;
+    margin: 10px 0 -20px 0;
+}
+
+a:hover{
+    cursor: pointer;
+}
+tr td{
+    text-align: center;
+}
+
+.page .current {
+    background: #FF0403;
+    color: white;
+}
+
+.page_Ques .current_Ques {
+    background: #FF0403;
+    color: white;
+}
