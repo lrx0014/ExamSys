@@ -10,7 +10,7 @@ function loadingData_Ques() {
     var totalPages_Ques = $('#totalPages_Ques').val();//总页码
     
     $.ajax({
-        url: '/php/ExamSys/Support/action/QuesList.php',
+        url: 'Support/action/QuesList.php',
         type: 'POST',
         data: { 'currentPage_Ques': currentPage_Ques
              },

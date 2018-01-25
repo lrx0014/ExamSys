@@ -27,7 +27,7 @@ function loadingData() {
     s_score2 = search_score2 ? search_score2 : '';
     
     $.ajax({
-        url: '/php/ExamSys/Support/action/Pages.php',
+        url: 'Support/action/Pages.php',
         type: 'POST',
         data: { 'currentPage': currentPage, 
                 's_id': s_id,
@@ -199,7 +199,7 @@ function search() {
     $('#search_score2').val(s_score2);
 
     $.ajax({
-        url: "/php/ExamSys/Support/action/Pages.php",
+        url: "Support/action/Pages.php",
         data: { 'currentPage': currentPage, 
                 's_id': s_id,
                 's_name':s_name,

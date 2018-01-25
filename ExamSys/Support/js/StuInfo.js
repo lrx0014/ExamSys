@@ -10,7 +10,7 @@ function loadingData() {
     var totalPages = $('#totalPages').val();//总页码
     
     $.ajax({
-        url: '/php/ExamSys/Support/action/StuInfo.php',
+        url: 'Support/action/StuInfo.php',
         type: 'POST',
         data: { 'currentPage': currentPage
              },
@@ -204,7 +204,7 @@ function search() {
     var currentPage = 1;//搜索时默认就是第一页
 
     $.ajax({
-        url: "/php/ExamSys/Support/action/StuInfo.php",
+        url: "Support/action/StuInfo.php",
         data: { 
             },
         type: "POST",
