@@ -2,7 +2,12 @@
 
 error_reporting(E_ALL & ~E_DEPRECATED);
 
-$con = mysql_connect("127.0.0.1", "Exam", "exam1234");
+/// 此处可更改数据库用户
+$IP      = "127.0.0.1";
+$DB_USER = "Exam";
+$DB_PWD  = "exam1234";
+
+$con = mysql_connect($IP, $DB_USER, $DB_PWD);
 mysql_query("set names 'utf8'",$con);
 $dbLink = mysql_select_db("Examdb",$con);
 

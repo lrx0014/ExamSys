@@ -12,7 +12,7 @@ if(isset($_POST['UserId']) && isset($_POST['UserPassword']) && isset($_POST['Use
     $UserLevel    = $_POST['UserLevel'];
 }
 
-$LoginStuSQL = "SELECT StuName,StuPassword,StuId FROM Student WHERE StuId='".$UserId."';";
+$LoginStuSQL     = "SELECT StuName,StuPassword,StuId FROM Student WHERE StuId='".$UserId."';";
 $LoginTeacherSQL = "SELECT TeacherName,TeacherId,TeacherPassword FROM Teacher WHERE TeacherId='".$UserId."';";
 $check = "";
 $name = "";
