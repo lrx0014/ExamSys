@@ -2,8 +2,7 @@
     header("Content-Type:text/html;charset=utf-8");
     error_reporting(0);
     //连接数据库
-    mysql_connect('127.0.0.1','Exam','exam1234');
-    mysql_select_db('examdb');
+    include_once("connect.php");
     mysql_query('set names utf8');
 
 

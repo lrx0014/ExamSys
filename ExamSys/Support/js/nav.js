@@ -5,32 +5,40 @@ $(document).ready(function(){
     $("#click1").click(function(){
         setCookie('thisNav',1);
         $("#info1").show();
-        $("#info2,#info3,#info4").hide();
-        $("#click1,#click2,#click3,#click4").removeClass("active");
+        $("#info2,#info3,#info4,#info5").hide();
+        $("#click1,#click2,#click3,#click4,#click5").removeClass("active");
         $(this).addClass("active");
     });
 
     $("#click2").click(function(){
         setCookie('thisNav',2);
         $("#info2").show();
-        $("#info1,#info3,#info4").hide();
-        $("#click1,#click2,#click3,#click4").removeClass("active");
+        $("#info1,#info3,#info4,#info5").hide();
+        $("#click1,#click2,#click3,#click4,#click5").removeClass("active");
         $(this).addClass("active");
     });
 
     $("#click3").click(function(){
         setCookie('thisNav',3);
         $("#info3").show();
-        $("#info1,#info2,#info4").hide();
-        $("#click1,#click2,#click3,#click4").removeClass("active");
+        $("#info1,#info2,#info4,#info5").hide();
+        $("#click1,#click2,#click3,#click4,#click5").removeClass("active");
         $(this).addClass("active");
     });
 
     $("#click4").click(function(){
         setCookie('thisNav',4);
         $("#info4").show();
-        $("#info1,#info2,#info3").hide();
-        $("#click1,#click2,#click3,#click4").removeClass("active");
+        $("#info1,#info2,#info3,#info5").hide();
+        $("#click1,#click2,#click3,#click4,#click5").removeClass("active");
+        $(this).addClass("active");
+    });
+
+    $("#click5").click(function(){
+        setCookie('thisNav',5);
+        $("#info5").show();
+        $("#info1,#info2,#info3,#info4").hide();
+        $("#click1,#click2,#click3,#click4,#click5").removeClass("active");
         $(this).addClass("active");
     });
 });

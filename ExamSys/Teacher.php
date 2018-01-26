@@ -21,6 +21,7 @@
 <body>
     <script src="Support/js/pages.js"></script>
     <script src="Support/js/Ques_List.js"></script>
+    <script src="Support/js/QsetAdd.js"></script>
     <?php include_once("Support/action/connect.php"); session_start(); ?>
     <?php if(!isset($_SESSION['level'])){
                 echo "<b><center><font size='30px'>拒绝访问：你没有登录</font></center></b>"; 
@@ -85,6 +86,9 @@
                     </li>
                     <li id="click4">
                         <a>录入试题</a>
+                    </li>
+                    <li id="click5">
+                        <a>快速组卷</a>
                     </li>
                 </ul>
             </div>
@@ -176,7 +180,11 @@
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                     <h1 class="page-header">浏览试题</h1>
 
-                    <h2 class="sub-header">选择试题集</h2>
+                    <h2 class="sub-header">选择试题集
+                        <select id="choose_set" name="choose_set">
+                        </select>
+                    </h2>
+
                     <div id="content">
                         <div >
                         <div >
@@ -239,6 +247,49 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 建立试题集(组卷) -->
+    <div id="info5" style="display:none">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">快速组卷</h1>
+
+            <h3 class="sub-header">
+                请输入题集信息
+                <button class="btn btn-success" id="go_create_set">提交组卷</button>
+            </h3>
+
+            <div class="input-group" style="width:60%;margin-left:20%">
+                <span class="input-group-addon">本次测试名称</span>
+                <input type="text" id="QsetName" class="form-control" placeholder="输入本次考试的名称" />
+            </div>
+
+            <h3 class="sub-header">
+                请从下方题库勾选要加入本题集的试题
+            </h3>
+
+            <table class="table table-bordered table-hover table-striped table-condensed">            
+                <thead>
+                    <tr>
+                        <td width="10%">题目编号</td>
+                        <td width="10%">分值</td>
+                        <td width="70%">题干预览</td>
+                        <td width="10%">确认添加</td>
+                    </tr>
+                    <tr id="tip_Qset" style="display:none;">
+                        <td colspan="4"></td>
+                    </tr>
+                </thead>            
+                <tbody id="Ques_List_add">                
+                </tbody>
+            </table>
+
+            <div id="content">
+                <div class="table-responsive">
+                            
                 </div>
             </div>
         </div>
