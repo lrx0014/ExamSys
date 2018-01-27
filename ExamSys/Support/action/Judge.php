@@ -14,7 +14,9 @@
         $StuChoice = $_POST['myAnswer'];
         $StuScore = $ins['score'];
 
-        $historySQL = "INSERT INTO testhistory VALUES($StuId,$Qid,'$StuChoice',$StuScore,NOW());";
+        $setid = $_SESSION['setid'];
+
+        $historySQL = "INSERT INTO testhistory VALUES($StuId,$setid,$Qid,'$StuChoice',$StuScore,NOW());";
 
         $r = mysql_query($historySQL);
         if($r){
@@ -25,7 +27,7 @@
             echo json_encode($js);
         }else{
             $js['success'] = 0;
-            $js['message'] = '数据库操作错误: '.mysql_error();
+            $js['message'] = "数据库操作错误(".$historySQL."): ".mysql_error();
             echo json_encode($js);
         }
     }

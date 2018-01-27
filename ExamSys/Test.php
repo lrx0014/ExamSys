@@ -24,6 +24,13 @@
                 return; 
             } 
     ?>
+    <?php
+        if(isset($_GET['setid']))
+        {
+            $_SESSION['setid'] = $_GET['setid'];
+        }
+    ?>
+    
     <script src="Support\jquery-3.2.1.min.js"></script>
     <script src="Support\js\Global.js"></script>
     <script src="Support\js\Test.js"></script>

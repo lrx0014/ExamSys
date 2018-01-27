@@ -38,7 +38,7 @@ function loadingData() {
         dataType: 'json',
         success: function (data) {
             var info = data.datas, total = data.total;
-            console.log(total);
+            //console.log(total);
             //调用ajaxSuccess处理函数
             ajaxSuccess(total, currentPage, info);
         },

@@ -181,7 +181,7 @@
                     <h1 class="page-header">浏览试题</h1>
 
                     <h2 class="sub-header">选择试题集
-                        <select id="choose_set" name="choose_set">
+                        <select id="choose_set" name="choose_set" class="dropdown">
                         </select>
                     </h2>
 

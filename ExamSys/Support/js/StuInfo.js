@@ -3,7 +3,50 @@ $(document).ready(function () {
     loadingData();
     var totalPages = 0;
     //页面加载数据
-})
+
+    Test_Set_Dropdown();
+
+    /// 选择题库
+    $("#go_test").click(function(){
+        var selected_set = $("#choose_set_test").children('option:selected').val()
+        console.log("go_test..." + selected_set);
+        if(selected_set=='-1')
+        {
+            alert("请先选择题库！！");
+        }else{
+            window.location="test.php?setid=" + selected_set;
+        }
+    });
+});
+
+function Test_Set_Dropdown()
+{
+    $.ajax({
+        url: 'Support/action/QsetAdd.php',
+        type: 'POST',
+        data: {"operation":"ShowDropdown"},
+        dataType: 'json',
+        success: function (data) {
+
+            var drop_html = "<option value='-1'>请选择题库</option>";
+
+            for (var i = 0; i < data.length; i++)
+            {
+                /// <option value="0">aaa</option>
+
+                drop_html += "<option value='" + data[i].sQid + "'>" + data[i].sName + "</option>";
+            }
+
+            $("#choose_set_test").html(drop_html);
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
 
 function loadingData() {
     var currentPage = $('#currentPage').val();//当前页码

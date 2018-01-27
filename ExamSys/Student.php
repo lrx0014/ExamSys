@@ -16,7 +16,12 @@
 </head>
 
 <body>
-    <?php include_once("Support/action/connect.php"); session_start(); ?>
+    <?php include_once("Support/action/connect.php"); session_start(); 
+        if(isset($_SESSION['setid']))
+        {
+            unset($_SESSION['setid']);
+        }
+    ?>
     <?php if(!isset($_SESSION['level'])){
                 echo "<b><center><font size='30px'>拒绝访问：你没有登录</font></center></b>"; 
                 return; 
@@ -26,7 +31,7 @@
             } 
     ?>
     <script src="Support/jquery-3.2.1.min.js"></script>
-    <script src="Support\js\Global.js"></script>
+    <script src="Support/js/Global.js"></script>
     <script src="Support/js/StuInfo.js"></script>
     <script type="text/javascript" src="Support/js/dialog.min.js"></script>
 
@@ -70,7 +75,10 @@
                     <p id="logintimetip">登录时间:</p>
                     <p id="logintime">获取中</p>
                     <p>
-                        <a href="Test.php" class="btn btn-primary btn-lg" role="button">
+                        <select id="choose_set_test" name="choose_set_test" class="dropdown">
+                            <option value='-1'>请选择题库</option>
+                        </select>
+                        <a id="go_test" class="btn btn-primary btn-lg" role="button">
                             马上去答题</a>
                     </p>
                 </div>
@@ -83,7 +91,11 @@
                     <div class="panel-body">
 
                         <table class="table table-striped">
-                            <caption>最近做过的题</caption>
+                            <caption>最近做过的题
+                                <select id="choose_set_stu" name="choose_set_stu" class="dropdown">
+                                    <option value='-1'>-all-</option>
+                                </select>
+                            </caption>
                             <div >
                             <input type="hidden" id="currentPage" value="1">
                             <input type="hidden" id="totalPages" value="">

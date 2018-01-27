@@ -6,6 +6,12 @@ session_start();
 
 $Userid = $_SESSION['UserId'];
 
+$setid = "";
+if(isset($_POST['setid']))
+{
+    $setid = $_POST['setid'];
+}
+
 $arr = array();
 
 $AquireSQL = "SELECT Qcontent,QScore,QChoice,Qid From question WHERE Qid=ANY(SELECT Qid FROM question LEFT JOIN  

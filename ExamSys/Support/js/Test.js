@@ -14,13 +14,13 @@ $('#next_ques').on('click', function () {
     AquireQuestion();
 });
 
-function AquireQuestion() {
+function AquireQuestion(setid) {
     console.log("AqureQues...");
     $.ajax({
         type: "POST",
         url: "Support/action/AquireQues.php",
         dataType: "JSON",
-        data: {},
+        data: {"setid":setid},
         success: function (data) {
 
             info = data;

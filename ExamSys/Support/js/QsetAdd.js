@@ -18,7 +18,7 @@ function Create_Set_Dropdown()
         dataType: 'json',
         success: function (data) {
 
-            var drop_html = "<option value='-1'>全部</option>";
+            var drop_html = "<option value='-1'>-all-</option>";
 
             for (var i = 0; i < data.length; i++)
             {

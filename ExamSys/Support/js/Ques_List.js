@@ -3,16 +3,32 @@ $(document).ready(function () {
     loadingData_Ques();
     var totalPages_Ques = 0;
     //页面加载数据
-})
+    //
+    $("#choose_set").change(function(){
+        if($(this).val()=='-1')
+        {
+            Update_Ques_Table();
+        }else{
+            Update_Ques_Table($(this).val());
+        }
+    });
+});
 
-function loadingData_Ques() {
+function Update_Ques_Table(sName='all')
+{
+    console.log("updating Table..."+sName);
+    loadingData_Ques(sName);
+}
+
+function loadingData_Ques(setName='all') {
     var currentPage_Ques = $('#currentPage_Ques').val();//当前页码
     var totalPages_Ques = $('#totalPages_Ques').val();//总页码
     
     $.ajax({
         url: 'Support/action/QuesList.php',
         type: 'POST',
-        data: { 'currentPage_Ques': currentPage_Ques
+        data: { 'currentPage_Ques': currentPage_Ques,
+                'setName'         : setName
              },
         dataType: 'json',
         success: function (data) {
