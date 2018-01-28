@@ -4,7 +4,16 @@ $(document).ready(function () {
     var totalPages = 0;
     //页面加载数据
 
+    Grade_Set_Dropdown();
+
     Test_Set_Dropdown();
+
+    ///下拉菜单查看考试记录
+    $("#choose_set_stu").change(function(){
+        $('#currentPage').val(0);
+        loadingData($(this).val());
+        var totalPages = 0;
+    });
 
     /// 选择题库
     $("#go_test").click(function(){
@@ -18,6 +27,35 @@ $(document).ready(function () {
         }
     });
 });
+
+function Grade_Set_Dropdown()
+{
+    $.ajax({
+        url: 'Support/action/QsetAdd.php',
+        type: 'POST',
+        data: {"operation":"ShowDropdown"},
+        dataType: 'json',
+        success: function (data) {
+
+            var drop_html = "<option value='-1'>-all-</option>";
+
+            for (var i = 0; i < data.length; i++)
+            {
+                /// <option value="0">aaa</option>
+
+                drop_html += "<option value='" + data[i].sQid + "'>" + data[i].sName + "</option>";
+            }
+
+            $("#choose_set_stu").html(drop_html);
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
 
 function Test_Set_Dropdown()
 {
@@ -48,14 +86,15 @@ function Test_Set_Dropdown()
     });
 }
 
-function loadingData() {
+function loadingData(setid=$("#choose_set_stu").val()) {
     var currentPage = $('#currentPage').val();//当前页码
     var totalPages = $('#totalPages').val();//总页码
     
     $.ajax({
         url: 'Support/action/StuInfo.php',
         type: 'POST',
-        data: { 'currentPage': currentPage
+        data: { 'currentPage': currentPage,
+                'setid'      : setid
              },
         dataType: 'json',
         success: function (data) {

@@ -2,9 +2,7 @@
 var info;
 
 $(document).ready(function () {
-
     AquireQuestion();
-
 });
 
 $('#next_ques').on('click', function () {
@@ -14,13 +12,13 @@ $('#next_ques').on('click', function () {
     AquireQuestion();
 });
 
-function AquireQuestion(setid) {
+function AquireQuestion() {
     console.log("AqureQues...");
     $.ajax({
         type: "POST",
         url: "Support/action/AquireQues.php",
         dataType: "JSON",
-        data: {"setid":setid},
+        data: {},
         success: function (data) {
 
             info = data;

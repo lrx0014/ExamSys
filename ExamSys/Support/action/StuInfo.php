@@ -13,15 +13,26 @@ mysql_query('set names utf8');
 
 $UserId = $_SESSION['UserId'];
 
+$CONDITIONS = "";
+if(isset($_POST['setid']))
+{
+    if($_POST['setid']=='all'||$_POST['setid']=='-1')
+    {
+        $CONDITIONS = "";
+    }else{
+        $CONDITIONS = "AND Qset=".$_POST['setid'];
+    }
+}
+
     //查询数据库
 $page = $_POST['currentPage'] ? intval($_POST['currentPage']) : 1;//默认是第一页
 
 $perPageNums = 5;//每页显示条数
 $offset = ($page - 1) * $perPageNums;
 
-$sql1 = "SELECT question.Qid,question.QScore,question.QAnswer,question.Qcontent,question.QChoice,StuScore,StuChoise,TestTime FROM testhistory,question WHERE StuId=$UserId AND question.qid=testhistory.qid limit $offset,$perPageNums;";
+$sql1 = "SELECT question.Qid,question.QScore,question.QAnswer,question.Qcontent,question.QChoice,StuScore,StuChoise,TestTime FROM testhistory,question WHERE StuId=$UserId AND question.qid=testhistory.qid $CONDITIONS limit $offset,$perPageNums;";
 
-$sql2 = "select count(*) count from testhistory where StuId=$UserId;";
+$sql2 = "SELECT count(*) count FROM testhistory WHERE StuId=$UserId $CONDITIONS;";
 
 $sql3 = "SELECT total FROM GradeView WHERE StuId=$UserId;";
 

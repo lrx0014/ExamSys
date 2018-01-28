@@ -7,13 +7,14 @@ session_start();
 $Userid = $_SESSION['UserId'];
 
 $setid = "";
-if(isset($_POST['setid']))
+if(isset($_SESSION['setid']))
 {
-    $setid = $_POST['setid'];
+    $setid = $_SESSION['setid'];
 }
 
 $arr = array();
 
+/*** 
 $AquireSQL = "SELECT Qcontent,QScore,QChoice,Qid From question WHERE Qid=ANY(SELECT Qid FROM question LEFT JOIN  
                 (SELECT Qid as i from testhistory WHERE testhistory.StuId=$Userid) as t1  
                     ON question.Qid=t1.i WHERE t1.i IS NULL);";
@@ -24,6 +25,32 @@ $CountSQL = "SELECT COUNT(*) as num From question WHERE Qid=ANY(SELECT Qid FROM 
 
 $DONE = "SELECT COUNT(*) as done FROM testhistory WHERE stuid=$Userid;";
 $ALL = "SELECT COUNT(*) as allQues FROM question;";
+$SCORE = "SELECT total FROM GradeView WHERE stuid=$Userid;";
+***/
+
+$CONDITONS = "";
+
+$SQL_CONDITINS = "SELECT * FROM question_sets WHERE QsetId=$setid;";
+
+$set_res = mysql_query($SQL_CONDITINS);
+
+if($set_res)
+{
+    $row = mysql_fetch_array($set_res);
+    $Qid = substr(str_replace('Q',',',$row['Qinclude']),1);
+    $CONDITONS = $Qid;
+}
+
+$AquireSQL = "SELECT Qcontent,QScore,QChoice,Qid From question WHERE Qid=ANY(SELECT Qid FROM question LEFT JOIN  
+                (SELECT Qid as i from testhistory WHERE testhistory.StuId=$Userid AND Qset=$setid) as t1  
+                    ON question.Qid=t1.i WHERE t1.i IS NULL AND Qid IN($CONDITONS));";
+
+$CountSQL = "SELECT COUNT(*) as num From question WHERE Qid=ANY(SELECT Qid FROM question LEFT JOIN  
+                (SELECT Qid as i from testhistory WHERE testhistory.StuId=$Userid AND Qset=$setid) as t1  
+                    ON question.Qid=t1.i WHERE t1.i IS NULL AND Qid IN($CONDITONS));";
+
+$DONE = "SELECT COUNT(*) as done FROM testhistory WHERE stuid=$Userid AND Qset=$setid;";
+$ALL = "SELECT COUNT(*) as allQues FROM question WHERE Qid IN($CONDITONS);";
 $SCORE = "SELECT total FROM GradeView WHERE stuid=$Userid;";
 
 $_d = mysql_fetch_array(mysql_query($DONE)); 
