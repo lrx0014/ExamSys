@@ -10,6 +10,9 @@ mysql_query('set names utf8');
 
 $setId = "";
 
+///$_POST['setName'] = '5';
+///$_POST['currentPage_Ques'] = 0;
+
 if(isset($_POST['setName']))
 {
     if($_POST['setName']=='all')
@@ -18,6 +21,18 @@ if(isset($_POST['setName']))
     }else{
         $qsetid = $_POST['setName']; 
         $setId  = "WHERE QsetId="."'$qsetid'";
+    }
+}
+
+function NO_MORE_RESULT_IN_THIS_SET($setid)
+{
+    $SQL = "DELETE FROM question_sets WHERE QsetId=$setid;";
+    if(mysql_query($SQL))
+    {
+        $arr = array();
+        $arr['empty'] = 1;
+        echo json_encode($arr);
+        exit();
     }
 }
 
@@ -38,12 +53,16 @@ if($set_res)
 {
     $row = mysql_fetch_array($set_res);
     $Qid = substr(str_replace('Q',',',$row['Qinclude']),1);
+    if($Qid=='')
+    {
+        NO_MORE_RESULT_IN_THIS_SET($_POST['setName']);
+    }
     $CONDITONS = $Qid;
 }
 
 $SET_CNT  = "";
 
-if($setId=="all")
+if($_POST['setName']=="all")
 {
     $WITH_SET = "";
     $SET_CNT  = "";
@@ -73,6 +92,8 @@ $result = array();
 while ($row = mysql_fetch_assoc($resource1)) {
     $result[] = $row;
 }
+
+//$result['sql'] = $setId;
 
 echo json_encode(array('datas' => $result, 'total' => $count['total']));
 ?>

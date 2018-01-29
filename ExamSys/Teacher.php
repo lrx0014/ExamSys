@@ -197,7 +197,7 @@
                                         <td width="20%">分值</td>
                                         <td width="20%">发布者</td>
                                         <td width="20%">创建时间</td>
-                                        <td width="20%">内容</td>
+                                        <td width="20%">操作</td>
                                     </tr>
                                     <tr id="tip_Ques" style="display:none;">
                                         <td colspan="4"></td>

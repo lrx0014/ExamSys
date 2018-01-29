@@ -1,6 +1,6 @@
 <?php
 
-$str = "Q1Q2Q3";
+$str = "Q1";
 
-echo substr(str_replace('Q',',',$str),1);
+echo str_replace('Q','',$str);
 

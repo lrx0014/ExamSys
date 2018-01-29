@@ -7,12 +7,67 @@ $(document).ready(function () {
     $("#choose_set").change(function(){
         if($(this).val()=='-1')
         {
-            Update_Ques_Table();
+            Update_Ques_Table('all');
         }else{
             Update_Ques_Table($(this).val());
         }
     });
 });
+
+function Delete_From_Question(Qid)
+{
+    console.log("Delete "+Qid+" From Question...");
+    
+    $.ajax({
+        url: 'Support/action/DeleteQues.php',
+        type: 'POST',
+        data: { 'target': 'Question',
+                'Qid'   :  Qid
+             },
+        dataType: 'json',
+        success: function (data) {
+            if(data.success==1)
+            {
+                dialog.tip("删除成功",Qid+"已从数据库中彻底删除！",function(){location.reload();});
+            }else{
+                dialog.tip("ERROR",data.message);
+            }
+            
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+function Delete_From_Set(SetName,Qid)
+{
+    console.log("Delete "+Qid+" From Set...");
+    
+    $.ajax({
+        url: 'Support/action/DeleteQues.php',
+        type: 'POST',
+        data: { 'target': SetName,
+                'Qid'   : Qid
+             },
+        dataType: 'json',
+        success: function (data) {
+            if(data.success==1)
+            {
+                dialog.tip("删除成功","题目Q"+Qid+"已从题组["+SetName+"]中移除！",function(){location.reload();});
+            }else{
+                dialog.tip("ERROR",data.message);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
 
 function Update_Ques_Table(sName='all')
 {
@@ -32,10 +87,16 @@ function loadingData_Ques(setName='all') {
              },
         dataType: 'json',
         success: function (data) {
+
+            if(data.empty==1)
+            {
+                /// 没有数据了
+            }else{
+                var info = data.datas, total_Ques = data.total;
+                //调用ajaxSuccess处理函数
+                ajaxSuccess_Ques(total_Ques, currentPage_Ques, info);
+            }
             
-            var info = data.datas, total_Ques = data.total;
-            //调用ajaxSuccess处理函数
-            ajaxSuccess_Ques(total_Ques, currentPage_Ques, info);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -116,12 +177,33 @@ function ajaxSuccess_Ques(total_Ques, currentPage_Ques, info) {
         html += '<td>' + info[i].QScore + '</td>';
         html += '<td>' + info[i].TeacherName + '</td>';
         html += '<td>' + info[i].CreateTime + '</td>';
-        html += "<td style='text-align:center'>" + "<button id='sq"+i+"' class='btn btn-primary btn-viewques'>查看<div class='view-ques' style='display:none'> "+ info[i].Qid+"###"+info[i].Qcontent+"###"+info[i].QChoice+"###"+info[i].QAnswer +" </div></button>" + '</td>';
+        html += "<td style='text-align:center'>" + 
+                    "<button id='sq"+i+"' class='btn btn-primary btn-viewques'>查看" +
+                        "<div class='view-ques' style='display:none'> " + 
+                            info[i].Qid+"###"+info[i].Qcontent+"###"+info[i].QChoice+"###"+info[i].QAnswer + 
+                        "</div>" +
+                    "</button> &nbsp;" + 
+                    "<button id='DEL"+info[i].Qid+"'class='btn btn-warning btn-primary btn-delete-from-set' name='delete'>删除</button>" +
+                    "</td>";
+        
         html += '</tr>';
     }
     $('#Ques_List').html(html);
+
+    $(".btn-delete-from-set").on('click',function(){
+        console.log("click Delete...");
+        if($("#choose_set").val()=='-1')
+        {
+            /// 从总题库中删除题目，同时删除所有相关表中的数据
+            Delete_From_Question($(this).attr('id').replace(/DEL/,""));
+        }else{
+            /// 只从题组中移除此题，并删除已存在的考试记录
+            Delete_From_Set($("#choose_set").find("option:selected").val(),$(this).attr('id').replace(/DEL/,""));
+        }
+    });
     
     //console.log(html);
+    //console.log(info['sql']);
 
     $('.btn-viewques').on('click',function(){
         //"3###以下哪些是浏览器？？             ###Chrome@IE@VS@Firefox@###0,1,3,###0,1,3,";
