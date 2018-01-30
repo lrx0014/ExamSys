@@ -10,7 +10,7 @@ $DB_NAME = "Examdb";        // 数据库名
 
 $con = mysql_connect($IP, $DB_USER, $DB_PWD);
 mysql_query("set names 'utf8'",$con);
-$dbLink = mysql_select_db("$DB_NAME,$con);
+$dbLink = mysql_select_db($DB_NAME,$con);
 
 
 if (!$con) {
