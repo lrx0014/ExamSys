@@ -91,6 +91,8 @@ function loadingData_Ques(setName='all') {
             if(data.empty==1)
             {
                 /// 没有数据了
+                var empty_tip = "<tr><td colspan='5'>没有数据</td></tr>";
+                $('#Ques_List').html(empty_tip);
             }else{
                 var info = data.datas, total_Ques = data.total;
                 //调用ajaxSuccess处理函数

@@ -95,7 +95,7 @@ function Go_Create_Set()
             console.log("ajax成功...");
             if(data.success==1)
             {
-                alert("SUCCESS!!");
+                dialog.tip('题组创建成功','页面需要刷新以更新数据',function(){location.reload()});
             }else{
                 alert("FAILED:"+data.message);
             }

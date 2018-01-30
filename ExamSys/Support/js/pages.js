@@ -38,7 +38,7 @@ function loadingData() {
         dataType: 'json',
         success: function (data) {
             var info = data.datas, total = data.total;
-            //console.log(total);
+            console.log('ajax...');
             //调用ajaxSuccess处理函数
             ajaxSuccess(total, currentPage, info);
         },
@@ -209,6 +209,7 @@ function search() {
         type: "POST",
         dataType: "JSON",
         success: function (data) {
+            
             var info = data.datas, total = data.total, html = '';
             if (!info) {
                 $('#GradeView').empty();
@@ -218,7 +219,7 @@ function search() {
                 return false;
             }
             $('#tip').hide();
-
+            //console.log("sear...");
             //调用ajaxSuccess处理函数
             ajaxSuccess(total, currentPage, info);
         }

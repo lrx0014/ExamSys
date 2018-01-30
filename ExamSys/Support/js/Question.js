@@ -54,7 +54,7 @@ $(document).ready(function () {
                 "QCorrect" : QCorrect
             },
             success: function (data) {
-                alert("录入成功！！");
+                dialog.tip('录入成功','页面需要刷新以更新数据',function(){location.reload()});
             }
         });
     })
