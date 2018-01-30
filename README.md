@@ -8,6 +8,7 @@ ExamSys （DEMO）
 
 开发使用的是 **WampServer 3.1.0 (php 5.6.31 + mysql 5.7.19)** <br>
 引用了JQuery和Bootstrap框架 <br>
+请阅读 **部署说明.txt** <br>
 
 Change Log
 -----------
