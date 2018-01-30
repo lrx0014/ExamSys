@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.6
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: 2018-01-25 15:58:16
--- 服务器版本： 5.7.20
--- PHP Version: 5.6.32
+-- Host: 127.0.0.1:3306
+-- Generation Time: 2018-01-30 08:40:18
+-- 服务器版本： 5.7.19
+-- PHP Version: 5.6.31
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -22,8 +22,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `examdb`
 --
-CREATE DATABASE IF NOT EXISTS `examdb` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `examdb`;
 
 -- --------------------------------------------------------
 
@@ -32,7 +30,7 @@ USE `examdb`;
 -- (See below for the actual view)
 --
 DROP VIEW IF EXISTS `gradeview`;
-CREATE TABLE `gradeview` (
+CREATE TABLE IF NOT EXISTS `gradeview` (
 `StuId` int(11)
 ,`StuName` varchar(20)
 ,`lastTime` datetime
@@ -46,7 +44,7 @@ CREATE TABLE `gradeview` (
 -- (See below for the actual view)
 --
 DROP VIEW IF EXISTS `lasttimeview`;
-CREATE TABLE `lasttimeview` (
+CREATE TABLE IF NOT EXISTS `lasttimeview` (
 `stuid` int(11)
 ,`lastTime` datetime
 );
@@ -58,7 +56,7 @@ CREATE TABLE `lasttimeview` (
 --
 
 DROP TABLE IF EXISTS `loginhistory`;
-CREATE TABLE `loginhistory` (
+CREATE TABLE IF NOT EXISTS `loginhistory` (
   `stuid` int(11) DEFAULT NULL,
   `isTeacher` tinyint(1) DEFAULT '0',
   `LoginTime` datetime DEFAULT NULL
@@ -71,7 +69,7 @@ CREATE TABLE `loginhistory` (
 -- (See below for the actual view)
 --
 DROP VIEW IF EXISTS `nextquestion`;
-CREATE TABLE `nextquestion` (
+CREATE TABLE IF NOT EXISTS `nextquestion` (
 `Qid` int(11)
 );
 
@@ -82,15 +80,33 @@ CREATE TABLE `nextquestion` (
 --
 
 DROP TABLE IF EXISTS `question`;
-CREATE TABLE `question` (
-  `Qid` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `question` (
+  `Qid` int(11) NOT NULL AUTO_INCREMENT,
   `Qcontent` text CHARACTER SET utf8,
   `QAnswer` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `QScore` int(11) DEFAULT NULL,
   `TeacherId` int(11) DEFAULT NULL,
   `CreateTime` datetime DEFAULT NULL,
-  `QChoice` varchar(255) CHARACTER SET utf8 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `QChoice` varchar(255) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`Qid`),
+  KEY `TeacherId` (`TeacherId`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `question_sets`
+--
+
+DROP TABLE IF EXISTS `question_sets`;
+CREATE TABLE IF NOT EXISTS `question_sets` (
+  `QsetId` int(11) NOT NULL AUTO_INCREMENT,
+  `QsetName` varchar(255) NOT NULL,
+  `Qinclude` varchar(255) NOT NULL,
+  `CreateTime` datetime DEFAULT NULL,
+  `Author` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`QsetId`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -99,11 +115,29 @@ CREATE TABLE `question` (
 --
 
 DROP TABLE IF EXISTS `student`;
-CREATE TABLE `student` (
+CREATE TABLE IF NOT EXISTS `student` (
   `StuId` int(11) NOT NULL,
   `StuName` varchar(20) DEFAULT NULL,
-  `StuPassword` varchar(255) DEFAULT NULL
+  `StuPassword` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`StuId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `stugrade`
+--
+
+DROP TABLE IF EXISTS `stugrade`;
+CREATE TABLE IF NOT EXISTS `stugrade` (
+  `Stuid` int(11) NOT NULL,
+  `SetId` int(11) NOT NULL,
+  `RightCNT` int(11) NOT NULL,
+  `WrongCNT` int(11) NOT NULL,
+  `Total` int(11) NOT NULL,
+  `StartTime` datetime DEFAULT NULL,
+  `FinishTime` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -112,7 +146,7 @@ CREATE TABLE `student` (
 -- (See below for the actual view)
 --
 DROP VIEW IF EXISTS `stuview`;
-CREATE TABLE `stuview` (
+CREATE TABLE IF NOT EXISTS `stuview` (
 `StuId` int(11)
 ,`StuName` varchar(20)
 ,`lastTime` datetime
@@ -125,10 +159,11 @@ CREATE TABLE `stuview` (
 --
 
 DROP TABLE IF EXISTS `teacher`;
-CREATE TABLE `teacher` (
+CREATE TABLE IF NOT EXISTS `teacher` (
   `TeacherId` int(11) NOT NULL,
   `TeacherName` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
-  `TeacherPassword` varchar(255) CHARACTER SET utf8 DEFAULT NULL
+  `TeacherPassword` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  PRIMARY KEY (`TeacherId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -138,12 +173,15 @@ CREATE TABLE `teacher` (
 --
 
 DROP TABLE IF EXISTS `testhistory`;
-CREATE TABLE `testhistory` (
+CREATE TABLE IF NOT EXISTS `testhistory` (
   `StuId` int(11) DEFAULT NULL,
+  `Qset` int(11) NOT NULL,
   `Qid` int(11) DEFAULT NULL,
   `StuChoise` varchar(20) DEFAULT NULL,
   `StuScore` int(11) DEFAULT NULL,
-  `TestTime` datetime DEFAULT NULL
+  `TestTime` datetime DEFAULT NULL,
+  KEY `StuId` (`StuId`),
+  KEY `Qid` (`Qid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -153,7 +191,7 @@ CREATE TABLE `testhistory` (
 -- (See below for the actual view)
 --
 DROP VIEW IF EXISTS `totalscore`;
-CREATE TABLE `totalscore` (
+CREATE TABLE IF NOT EXISTS `totalscore` (
 `StuId` int(11)
 ,`total` decimal(32,0)
 );
@@ -202,46 +240,6 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `stuview
 DROP TABLE IF EXISTS `totalscore`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `totalscore`  AS  select `testhistory`.`StuId` AS `StuId`,sum(`testhistory`.`StuScore`) AS `total` from `testhistory` group by `testhistory`.`StuId` ;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `question`
---
-ALTER TABLE `question`
-  ADD PRIMARY KEY (`Qid`),
-  ADD KEY `TeacherId` (`TeacherId`);
-
---
--- Indexes for table `student`
---
-ALTER TABLE `student`
-  ADD PRIMARY KEY (`StuId`);
-
---
--- Indexes for table `teacher`
---
-ALTER TABLE `teacher`
-  ADD PRIMARY KEY (`TeacherId`);
-
---
--- Indexes for table `testhistory`
---
-ALTER TABLE `testhistory`
-  ADD KEY `StuId` (`StuId`),
-  ADD KEY `Qid` (`Qid`);
-
---
--- 在导出的表使用AUTO_INCREMENT
---
-
---
--- 使用表AUTO_INCREMENT `question`
---
-ALTER TABLE `question`
-  MODIFY `Qid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- 限制导出的表
