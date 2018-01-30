@@ -11,7 +11,15 @@ ExamSys （DEMO）
 
 Change Log
 -----------
-### DEMO v0.1 (2018/01/25)
+### ExamSys v0.2 (2018/01/30)
+    修复了一些BUG，增加了新功能
+* 修复一些页面逻辑是漏洞
+* 增加了组卷功能，可以区分不同场次的考试
+* 可以删除题目
+  
+  <hr>
+  
+### ExamSys -DEMO v0.1 (2018/01/25)
     实现最基础的功能，验证程序可正常工作
   * 管理员端和考生端的注册登录
   * 多项选择题的录入
@@ -41,3 +49,6 @@ Change Log
 
 #### [教师可以自己录入试题，目前只支持多项选择题，以后会加入其它常见题型]
 ![](https://github.com/lrx0014/ExamSys/blob/master/Screenshots/Teacher_3.PNG)
+
+#### [组卷功能，设置不同的考试]
+![](https://github.com/lrx0014/ExamSys/blob/master/Screenshots/Teacher_4.PNG)
