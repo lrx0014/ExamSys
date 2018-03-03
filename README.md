@@ -1,10 +1,12 @@
 ExamSys （DEMO）
 ===========================
-目前程序处于demo阶段, 这是本人独立编写的第一个比较大型的项目, 完全出于学习目的和个人兴趣, 工程经验不足, 设计还有许多不如意的地方, 以后会慢慢改进, 慢慢完善这个系统, 使其可以满足大部分在线测试的需求. <br>
+ExamSys is an online exam system based on Web; the front end is constructed by HTML+JS+CSS. The back end is realized by PHP-MySOL with the application of BootStrap and JQuery framework and AJAX JSON technologies; the project constructs a simple and easy user interface, which is divided into two parts of student and teacher terminal; after logging in, students can choose freely random question bank for exercise, and they can check their performance; teacher accounts can make corresponding management over question bank, details, and performance; the system supports all kinds of question types (multiple choice, blank filling and judging) and can mark automatically the objective questions. 
+
+ExamSys是一个基于Web的在线考试系统，前端使用HTML+JS+CSS构建，后端使用PHP+MySQL实现，应用了BootStrap和JQuery框架以及AJAX、JSON等技术；程序构建了一个清爽简单的用户界面，分为学生端和教师端两部分，学生登录系统后可以自由选择任意题库进行答题练习，也可随时查看自己的答题情况，教师账户可对题库、题目细节、学生成绩等进行相应的管理操作。系统支持各种主流题型(单选多选、填空、判断)，对客观题可以进行自动判分 。设计还有许多不如意的地方, 以后会慢慢改进, 慢慢完善这个系统, 使其可以满足大部分在线测试的需求. <br>
 
   Author  | Email
   ------------- | -------------
- Ryann Li  | lrx0014@hotmail.com
+ Ryann  | lrx0014@hotmail.com
 
 开发使用的是 **WampServer 3.1.0 (php 5.6.31 + mysql 5.7.19)** <br>
 引用了JQuery和Bootstrap框架 <br>
@@ -28,7 +30,7 @@ Change Log
   
   <hr>
   
-### Screenshot (也可进入Screenshots目录查看)
+### Screenshot
 
 #### [登录页]
 ![](https://github.com/lrx0014/ExamSys/blob/master/Screenshots/login_page.PNG)
