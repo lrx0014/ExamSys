@@ -1,4 +1,4 @@
-ExamSys （DEMO）
+ExamSys在线考试系统(WEB)
 ===========================
 ExamSys is an online exam system based on Web; the front end is constructed by HTML+JS+CSS. The back end is realized by PHP-MySOL with the application of BootStrap and JQuery framework and AJAX JSON technologies; the project constructs a simple and easy user interface, which is divided into two parts of student and teacher terminal; after logging in, students can choose freely random question bank for exercise, and they can check their performance; teacher accounts can make corresponding management over question bank, details, and performance; the system supports all kinds of question types (multiple choice, blank filling and judging) and can mark automatically the objective questions. 
 
