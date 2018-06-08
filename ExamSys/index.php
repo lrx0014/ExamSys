@@ -51,7 +51,7 @@
         <div class="row">
             <div class="col-md-12">
                 <form method="POST" action="Support/action/Login.php" class="form-signin" style="margin-top:8%">
-                    <h2 class="form-signin-heading">登录 Login</h2>
+                    <h2 class="form-signin-heading">登录</h2>
                     <label for="name">选择身份</label>
                     <select id="UserLevel" name="UserLevel" class="form-control">
                         <option value="0">学生</option>
