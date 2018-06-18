@@ -1,6 +1,7 @@
 <?php
 
-// error_reporting(E_ALL & ~E_DEPRECATED);
+error_reporting(E_ALL & ~E_DEPRECATED);
+echo "test"
 include_once("connect.php");
 session_start();
 $UserId = "";
