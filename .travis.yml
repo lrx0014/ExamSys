@@ -1,13 +1,10 @@
 sudo: required
 services:
 - docker
-before_install:
-- docker build -t lrx0014/examsys .
-deploy:
-  provider: script
-  script: bash docker-push.sh
-  on:
-    branch: master
+script:
+  - docker build -t lrx0014/examsys:dev .
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push lrx0014/examsys:dev
 env:
   matrix:
   - secure: Nvu/13zOgpCGLxqAq3m9s408ti75+rj0CbVsW7LSuSZ6sZAuDzf7KZdmHPwMOOOsQk0VfPI7pZUUsK/LTyuRveZ+GUtSSZ7Ax6/8C1KhsqDLXrywHByDtlVabZ9S3CH4VTtfSBC2PSlJ3m23GYN0ZZqoyI4MrJgKbcw2k/jA6QayJnmxDhOmXQar80zco6g6qohdZ9r8a69WFdZ3twZ68G1sQxA1dl4YAoqrBLFOEluW0kzbv/n/NVqLS2vNb8vm/iXsGIuPIcw2VK6QEUZLgIdfPyB10kuiNEVHp+9JsXPLtH8nyT26cgXP2AaBTRIiik65vdFa4P8TZcYH8jqOzTyjlKk/yEoujsC7DHrKWNJ2aL5QIDEDpzRF9+bFbyZpaU9ffDbHNhhDG5VFrsAr7/fk21ey2+6fTjDVB6oXKal81P8501KFNQjnCVIO3A3ek12oNvSuylUd1GbQrWGeHMiYzX/AYTx456Rw1M40bCdD5OV52eD07OEbXwRMHbGbXs54iMUVUZPkjjaQnvpxz0pn7zz2iB8NZ/yDD95Fdt3KS2/axiS92mgvjRmdLhL5xTbaks+grTlMX9IVy9vsuqfACez1KsjMBZQTvWjTWtDNi0iNBInxOteIubgk2u+klpzc6PvZfoQX6mTLnPRDeVSNxQC/gHm5w061aICDy+8=
