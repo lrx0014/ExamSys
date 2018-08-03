@@ -1,5 +1,4 @@
 sudo: required
-language: php
 services:
 - docker
 before_install:
