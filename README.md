@@ -28,7 +28,7 @@ ExamSys是一个基于Web的在线考试系统，前端使用HTML+JS+CSS构建�
 
 开发使用的是 **WampServer 3.1.0 (php 5.6.31 + mysql 5.7.19)** <br>
 引用了JQuery和Bootstrap框架 <br>
-如果你不想使用Docker, 希望**手动部署**的话请阅读 [**How_To_Deploy.txt**](https://github.com/lrx0014/ExamSys/blob/master/%E9%83%A8%E7%BD%B2%E8%AF%B4%E6%98%8E.txt "部署说明") <br>
+如果你不想使用Docker, 希望**手动部署**的话请阅读 [**How_To_Deploy.txt**](https://github.com/lrx0014/ExamSys/blob/master/How_To_Deploy.txt "部署说明") <br>
 
 Change Logs
 -----------
