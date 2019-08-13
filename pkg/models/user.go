@@ -73,7 +73,7 @@ func Register(phone string, pwd string) error {
 			Gender: "0",
 		}
 
-		if user.Phone == "18683668831" {
+		if user.Phone == "15800000000" {
 			user.Permission = "1"
 		} else {
 			user.Permission = "0"
