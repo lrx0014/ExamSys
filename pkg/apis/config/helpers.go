@@ -29,11 +29,5 @@ func NewForEnv() *Config {
 		cfg.KeyPath = val
 	}
 
-	cfg.JaegerURL = os.Getenv("JaegerURL")
-
-	cfg.StorageURL = os.Getenv("StorageURL")
-	cfg.StorageUser = os.Getenv("StorageUser")
-	cfg.StoragePass = os.Getenv("StoragePass")
-
 	return cfg
 }
