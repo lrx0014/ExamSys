@@ -1,53 +1,31 @@
-package models
+package user
 
 import (
-	"bytes"
-	"compress/flate"
 	"fmt"
-	"io"
 	"log"
 
 	"github.com/boltdb/bolt"
+	"github.com/lrx0014/ExamSys/pkg/types"
 	uuid "github.com/satori/go.uuid"
 )
+
+// UserManager implements the methods of user management.
+type UserManager struct{}
+
+var _ UserManagerInterface = &UserManager{}
 
 const (
 	dbName     = "ExamSys.db"
 	userBucket = "user"
 )
 
-// User 用户类
-type User struct {
-	Id         string `json:"userId"`
-	Name       string `json:"userName"`
-	Gender     string `json:"gender"`
-	Phone      string `json:"userMobile"`
-	Pwd        string `json:"pwd"`
-	Permission string `json:"permission"`
-}
-
-// LoginReq 登录请求参数类
-type LoginReq struct {
-	Phone string `json:"mobile"`
-	Pwd   string `json:"pwd"`
-}
-
-// 序列化
-func dumpUser(user User) []byte {
-	dumped, _ := user.MarshalJSON()
-	return CompressByte(dumped)
-}
-
-// 反序列化
-func loadUser(jsonByte []byte) User {
-	res := User{}
-	res.UnmarshalJSON(DecompressByte(jsonByte))
-	return res
+func NewUserManager() *UserManager {
+	return &UserManager{}
 }
 
 // Register 插入用户，先检查是否存在用户，如果没有则存入
-func Register(phone string, pwd string) error {
-	if CheckUser(phone) {
+func (u *UserManager) Register(phone string, pwd string) error {
+	if u.CheckUser(phone) {
 		return fmt.Errorf("用户已存在！")
 	}
 
@@ -65,7 +43,7 @@ func Register(phone string, pwd string) error {
 		uidObj := uuid.NewV4()
 		uid := uidObj.String()
 
-		user := User{
+		user := types.User{
 			Phone:  phone,
 			Id:     uid,
 			Name:   phone,
@@ -86,7 +64,7 @@ func Register(phone string, pwd string) error {
 }
 
 // CheckUser 检查用户是否存在
-func CheckUser(phone string) bool {
+func (u *UserManager) CheckUser(phone string) bool {
 	db, err := bolt.Open(dbName, 0600, nil)
 	if err != nil {
 		log.Fatal(err)
@@ -114,14 +92,14 @@ func CheckUser(phone string) bool {
 }
 
 // LoginCheck 登录验证
-func LoginCheck(loginReq LoginReq) (bool, User, error) {
+func (u *UserManager) LoginCheck(loginReq types.LoginReq) (bool, types.User, error) {
 	db, err := bolt.Open(dbName, 0600, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	resultUser := User{}
+	resultUser := types.User{}
 	resultBool := false
 	err = db.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(userBucket))
@@ -146,22 +124,15 @@ func LoginCheck(loginReq LoginReq) (bool, User, error) {
 	return resultBool, resultUser, err
 }
 
-// EditUserReq 更新用户信息数据类
-type EditUserReq struct {
-	UserId     string `json:"userId"`
-	UserName   string `json:"userName"`
-	UserGender string `json:"gender"`
-}
-
 // UpdateUser 更新用户信息
-func UpdateUser(editUser EditUserReq) (User, error) {
+func (u *UserManager) UpdateUser(editUser types.EditUserReq) (types.User, error) {
 	db, err := bolt.Open(dbName, 0600, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	var result User
+	var result types.User
 	err = db.Update(func(tx *bolt.Tx) error {
 		bucket, err := tx.CreateBucketIfNotExists([]byte(userBucket))
 		if err != nil {
@@ -183,8 +154,8 @@ func UpdateUser(editUser EditUserReq) (User, error) {
 }
 
 //ResetPwd 重置密码
-func ResetPwd(mobile string, pwd string) error {
-	if !CheckUser(mobile) {
+func (u *UserManager) ResetPwd(mobile string, pwd string) error {
+	if !u.CheckUser(mobile) {
 		return fmt.Errorf("用户不存在！")
 	}
 
@@ -210,33 +181,4 @@ func ResetPwd(mobile string, pwd string) error {
 		return nil
 	})
 	return err
-}
-
-// compressByte returns a compressed byte slice.
-func CompressByte(src []byte) []byte {
-	compressedData := new(bytes.Buffer)
-	compress(src, compressedData, 9)
-	return compressedData.Bytes()
-}
-
-// compress uses flate to compress a byte slice to a corresponding level
-func compress(src []byte, dest io.Writer, level int) {
-	compressor, _ := flate.NewWriter(dest, level)
-	compressor.Write(src)
-	compressor.Close()
-}
-
-// decompressByte returns a decompressed byte slice.
-func DecompressByte(src []byte) []byte {
-	compressedData := bytes.NewBuffer(src)
-	deCompressedData := new(bytes.Buffer)
-	decompress(compressedData, deCompressedData)
-	return deCompressedData.Bytes()
-}
-
-// compress uses flate to decompress an io.Reader
-func decompress(src io.Reader, dest io.Writer) {
-	decompressor := flate.NewReader(src)
-	io.Copy(dest, decompressor)
-	decompressor.Close()
 }

@@ -10,7 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/lrx0014/ExamSys/pkg/apis/config"
+	"github.com/lrx0014/ExamSys/pkg/config"
 	usershandlers "github.com/lrx0014/ExamSys/pkg/server/handlers/users"
 	versionhandlers "github.com/lrx0014/ExamSys/pkg/server/handlers/version"
 )

@@ -8,7 +8,7 @@ import (
 
 	"github.com/codegangsta/cli"
 
-	"github.com/lrx0014/ExamSys/pkg/apis/config"
+	"github.com/lrx0014/ExamSys/pkg/config"
 	"github.com/lrx0014/ExamSys/pkg/server"
 )
 

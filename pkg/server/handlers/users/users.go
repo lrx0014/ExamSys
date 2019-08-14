@@ -5,13 +5,18 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/lrx0014/ExamSys/pkg/models"
+	"github.com/lrx0014/ExamSys/pkg/models/user"
 
-	myjwt "github.com/lrx0014/ExamSys/pkg/middleware"
+	jwt "github.com/lrx0014/ExamSys/pkg/middleware/jwt"
 
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/lrx0014/ExamSys/pkg/types"
 )
+
+type UserHandler struct {
+	userManager user.UserManagerInterface
+}
 
 // 注册信息
 type RegistInfo struct {
@@ -21,17 +26,25 @@ type RegistInfo struct {
 	Pwd string `json:"pwd"`
 }
 
+func newHandler() *UserHandler {
+	um := user.NewUserManager()
+	return &UserHandler{
+		userManager: um,
+	}
+}
+
 //InstallHandlers install Handlers
 func InstallHandlers(routerGroup *gin.RouterGroup) {
-	routerGroup.POST("/v2/login", Login)
-	routerGroup.POST("/v2/register", RegisterUser)
+	h := newHandler()
+	routerGroup.POST("/v2/login", h.Login)
+	routerGroup.POST("/v2/register", h.RegisterUser)
 }
 
 // Register 注册用户
-func RegisterUser(c *gin.Context) {
+func (u *UserHandler) RegisterUser(c *gin.Context) {
 	var registerInfo RegistInfo
 	if c.BindJSON(&registerInfo) == nil {
-		err := models.Register(registerInfo.Phone, registerInfo.Pwd)
+		err := u.userManager.Register(registerInfo.Phone, registerInfo.Pwd)
 		if err == nil {
 			c.JSON(http.StatusOK, gin.H{
 				"status": 0,
@@ -54,14 +67,14 @@ func RegisterUser(c *gin.Context) {
 // LoginResult 登录结果结构
 type LoginResult struct {
 	Token string `json:"token"`
-	models.User
+	types.User
 }
 
 // Login 登录
-func Login(c *gin.Context) {
-	var loginReq models.LoginReq
+func (u *UserHandler) Login(c *gin.Context) {
+	var loginReq types.LoginReq
 	if c.BindJSON(&loginReq) == nil {
-		isPass, user, err := models.LoginCheck(loginReq)
+		isPass, user, err := u.userManager.LoginCheck(loginReq)
 		if isPass {
 			generateToken(c, user)
 		} else {
@@ -79,15 +92,15 @@ func Login(c *gin.Context) {
 }
 
 // 生成令牌
-func generateToken(c *gin.Context, user models.User) {
-	j := &myjwt.JWT{
-		[]byte("newtrekWang"),
+func generateToken(c *gin.Context, user types.User) {
+	j := &jwt.JWT{
+		SigningKey: []byte("newtrekWang"),
 	}
-	claims := myjwt.CustomClaims{
-		user.Id,
-		user.Name,
-		user.Phone,
-		jwtgo.StandardClaims{
+	claims := jwt.CustomClaims{
+		ID:    user.Id,
+		Name:  user.Name,
+		Phone: user.Phone,
+		StandardClaims: jwtgo.StandardClaims{
 			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
 			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
 			Issuer:    "lrx0014",                       //签名的发行者
@@ -119,8 +132,8 @@ func generateToken(c *gin.Context, user models.User) {
 }
 
 // GetDataByTime 一个需要token认证的测试接口
-func GetDataByTime(c *gin.Context) {
-	claims := c.MustGet("claims").(*myjwt.CustomClaims)
+func (u *UserHandler) GetDataByTime(c *gin.Context) {
+	claims := c.MustGet("claims").(*jwt.CustomClaims)
 	if claims != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": 0,
