@@ -95,7 +95,7 @@ func (u *UserHandler) Login(c *gin.Context) {
 // 生成令牌
 func generateToken(c *gin.Context, user types.User) {
 	j := &jwt.JWT{
-		SigningKey: []byte("newtrekWang"),
+		SigningKey: []byte("lrx0014"),
 	}
 	claims := jwt.CustomClaims{
 		ID:    user.Id,

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -13,7 +14,7 @@ import (
 // JWTAuth 中间件，检查token
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.Request.Header.Get("token")
+		token := c.Request.Header.Get("Authorization")
 		if token == "" {
 			c.JSON(http.StatusOK, gin.H{
 				"status": -1,
@@ -23,6 +24,7 @@ func JWTAuth() gin.HandlerFunc {
 			return
 		}
 
+		token = strings.Replace(token, "Bearer ", "", 1)
 		log.Print("get token: ", token)
 
 		j := NewJWT()
