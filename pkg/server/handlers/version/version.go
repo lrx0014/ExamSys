@@ -15,7 +15,7 @@ type handler struct{}
 //InstallHandlers install Handlers
 func InstallHandlers(routerGroup *gin.RouterGroup) {
 	h := &handler{}
-	routerGroup.GET("/v2/version", h.handleVersion)
+	routerGroup.GET("/version", h.handleVersion)
 }
 
 func (h *handler) handleVersion(c *gin.Context) {

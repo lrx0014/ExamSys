@@ -34,10 +34,11 @@ func newHandler() *UserHandler {
 }
 
 //InstallHandlers install Handlers
-func InstallHandlers(routerGroup *gin.RouterGroup) {
+func InstallHandlers(normal *gin.RouterGroup, auth *gin.RouterGroup) {
 	h := newHandler()
-	routerGroup.POST("/v2/login", h.Login)
-	routerGroup.POST("/v2/register", h.RegisterUser)
+	normal.POST("/login", h.Login)
+	normal.POST("/register", h.RegisterUser)
+	auth.GET("/info", h.GetDataByTime)
 }
 
 // Register 注册用户

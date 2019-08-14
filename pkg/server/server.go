@@ -10,6 +10,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/lrx0014/ExamSys/pkg/middleware/jwt"
+
 	"github.com/lrx0014/ExamSys/pkg/config"
 	usershandlers "github.com/lrx0014/ExamSys/pkg/server/handlers/users"
 	versionhandlers "github.com/lrx0014/ExamSys/pkg/server/handlers/version"
@@ -68,6 +70,8 @@ func (s *Server) InstallDefaultHandlers() {
 
 	http.Handle("/v1/", s.engine)
 	http.Handle("/v2/", s.engine)
+	http.Handle("/login", s.engine)
+	http.Handle("/register", s.engine)
 	http.Handle("/ping", s.engine)
 
 	// install healthz
@@ -75,12 +79,13 @@ func (s *Server) InstallDefaultHandlers() {
 		c.String(200, "pong")
 	})
 
+	normal := s.engine.Group("/")
+
 	// enable basic auth
-	authorized := s.engine.Group("/", gin.BasicAuth(gin.Accounts{
-		s.cfg.BasicAuthUser: s.cfg.BasicAuthPassword,
-	}))
+	authorized := s.engine.Group("/v2")
+	authorized.Use(jwt.JWTAuth())
 
 	// install user handlers
 	versionhandlers.InstallHandlers(authorized)
-	usershandlers.InstallHandlers(authorized)
+	usershandlers.InstallHandlers(normal, authorized)
 }
