@@ -13,20 +13,32 @@ func NewForEnv() *Config {
 		cfg.Port = val
 	}
 
-	if val, ok := os.LookupEnv("BasicAuthUser"); ok {
-		cfg.BasicAuthUser = val
-	}
-
-	if val, ok := os.LookupEnv("BasicAuthPassword"); ok {
-		cfg.BasicAuthPassword = val
-	}
-
 	if val, ok := os.LookupEnv("CertPath"); ok {
 		cfg.CertPath = val
 	}
 
 	if val, ok := os.LookupEnv("KeyPath"); ok {
 		cfg.KeyPath = val
+	}
+
+	if val, ok := os.LookupEnv("DBHost"); ok {
+		cfg.DBHost = val
+	}
+
+	if val, ok := os.LookupEnv("DBPort"); ok {
+		cfg.DBPort = val
+	}
+
+	if val, ok := os.LookupEnv("DBName"); ok {
+		cfg.DBName = val
+	}
+
+	if val, ok := os.LookupEnv("DBUser"); ok {
+		cfg.DBUser = val
+	}
+
+	if val, ok := os.LookupEnv("DBPassword"); ok {
+		cfg.DBPassword = val
 	}
 
 	return cfg
