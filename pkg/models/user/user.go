@@ -2,115 +2,51 @@ package user
 
 import (
 	"fmt"
-	"log"
+	"os"
 
-	"github.com/boltdb/bolt"
+	"github.com/jinzhu/gorm"
+	"github.com/lrx0014/ExamSys/pkg/config"
 	"github.com/lrx0014/ExamSys/pkg/types"
+
+	log "github.com/golang/glog"
 )
 
 // UserManager implements the methods of user management.
-type UserManager struct{}
-
-var _ UserManagerInterface = &UserManager{}
-
-const (
-	dbName     = "ExamSys.db"
-	userBucket = "user"
-)
-
-func NewUserManager() *UserManager {
-	return &UserManager{}
+type UserManager struct {
+	DBClient *gorm.DB
 }
 
-// Register 插入用户，先检查是否存在用户，如果没有则存入
-func (u *UserManager) Register(userReq types.User) error {
-	if u.CheckUser(userReq.Id) {
-		return fmt.Errorf("user not exist")
-	}
+var _ types.UserManagerInterface = &UserManager{}
 
-	db, err := bolt.Open(dbName, 0600, nil)
+func NewUserManager(conf *config.Config) *UserManager {
+	host := conf.DBHost
+	port := conf.DBPort
+	dbName := conf.DBName
+	username := conf.DBUser
+	password := conf.DBPassword
+	connStr := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbName)
+	db, err := gorm.Open("mysql", connStr)
 	if err != nil {
-		log.Fatal(err)
+		log.Errorf("Failed to connect to database: %v", err)
+		os.Exit(-1)
 	}
 	defer db.Close()
-	err = db.Update(func(tx *bolt.Tx) error {
-		bucket, err := tx.CreateBucketIfNotExists([]byte(userBucket))
-		if err != nil {
-			return err
-		}
-
-		user := types.User{
-			Phone:      userReq.Phone,
-			Id:         userReq.Id,
-			Name:       userReq.Name,
-			Pwd:        userReq.Pwd,
-			Gender:     userReq.Gender,
-			Permission: userReq.Permission,
-		}
-
-		err = bucket.Put([]byte(userReq.Id), dumpUser(user))
-		return err
-	})
-
-	return err
+	return &UserManager{
+		DBClient: db,
+	}
 }
 
-// CheckUser 检查用户是否存在
-func (u *UserManager) CheckUser(id string) bool {
-	db, err := bolt.Open(dbName, 0600, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	result := false
-
-	err = db.View(func(tx *bolt.Tx) error {
-		bucket := tx.Bucket([]byte(userBucket))
-		if bucket == nil {
-			return fmt.Errorf(" userBuket is null")
-		}
-		c := bucket.Cursor()
-		for k, v := c.First(); k != nil; k, v = c.Next() {
-			userTemp := loadUser(v)
-			if id == userTemp.Id {
-				result = true
-				break
-			}
-		}
-		return nil
-	})
-	return result
+func (u *UserManager) Register(register types.RegisterReq) (bool, error) {
+	//
+	return true, nil
 }
 
-// LoginCheck 登录验证
-func (u *UserManager) LoginCheck(loginReq types.LoginReq) (bool, types.User, error) {
-	db, err := bolt.Open(dbName, 0600, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+func (u *UserManager) CheckUser(id string) (bool, error) {
+	//
+	return false, nil
+}
 
-	resultUser := types.User{}
-	resultBool := false
-	err = db.View(func(tx *bolt.Tx) error {
-		bucket := tx.Bucket([]byte(userBucket))
-		if bucket == nil {
-			return fmt.Errorf(" userBuket is null")
-		}
-		c := bucket.Cursor()
-		for k, v := c.First(); k != nil; k, v = c.Next() {
-			userTemp := loadUser(v)
-			if loginReq.Phone == userTemp.Phone && loginReq.Pwd == userTemp.Pwd {
-				resultUser = userTemp
-				resultBool = true
-				break
-			}
-		}
-		if !resultBool {
-			return fmt.Errorf("user info error")
-		}
-		return nil
-	})
-	return resultBool, resultUser, err
+func (u *UserManager) LoginCheck(login types.LoginReq) (bool, types.LoginResp, error) {
+	//
+	return true, types.LoginResp{}, nil
 }

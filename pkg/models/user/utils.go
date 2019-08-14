@@ -38,14 +38,14 @@ func decompress(src io.Reader, dest io.Writer) {
 }
 
 // 序列化
-func dumpUser(user types.User) []byte {
+func dumpUser(user types.RegisterReq) []byte {
 	dumped, _ := user.MarshalJSON()
 	return compressByte(dumped)
 }
 
 // 反序列化
-func loadUser(jsonByte []byte) types.User {
-	res := types.User{}
+func loadUser(jsonByte []byte) types.RegisterReq {
+	res := types.RegisterReq{}
 	res.UnmarshalJSON(decompressByte(jsonByte))
 	return res
 }
