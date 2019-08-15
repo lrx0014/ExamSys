@@ -27,7 +27,7 @@ func NewUserManager(conf *config.Config) *UserManager {
 	connStr := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbName)
 	db, err := gorm.Open("mysql", connStr)
 	if err != nil {
-		log.Errorf("Failed to connect to database: %v", err)
+		log.Errorf("Failed to connect to database [%s]: %v", connStr, err)
 		os.Exit(-1)
 	}
 	defer db.Close()
@@ -46,7 +46,7 @@ func (u *UserManager) CheckUser(id string) (bool, error) {
 	return false, nil
 }
 
-func (u *UserManager) LoginCheck(login types.LoginReq) (bool, types.LoginResp, error) {
+func (u *UserManager) LoginCheck(login types.LoginReq) (bool, error) {
 	//
-	return true, types.LoginResp{}, nil
+	return true, nil
 }

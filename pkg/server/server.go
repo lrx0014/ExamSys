@@ -87,5 +87,5 @@ func (s *Server) InstallDefaultHandlers() {
 
 	// install user handlers
 	versionhandlers.InstallHandlers(authorized)
-	usershandlers.InstallHandlers(normal, authorized)
+	usershandlers.InstallHandlers(s.cfg, normal, authorized)
 }

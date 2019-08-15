@@ -4,7 +4,7 @@ package types
 type UserManagerInterface interface {
 	Register(register RegisterReq) (bool, error)
 	CheckUser(id string) (bool, error)
-	LoginCheck(login LoginReq) (bool, LoginResp, error)
+	LoginCheck(login LoginReq) (bool, error)
 }
 
 // User 用户类

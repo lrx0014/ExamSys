@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/lrx0014/ExamSys/pkg/config"
+
 	"github.com/lrx0014/ExamSys/pkg/models/user"
 
 	jwt "github.com/lrx0014/ExamSys/pkg/middleware/jwt"
@@ -15,7 +17,7 @@ import (
 )
 
 type UserHandler struct {
-	userManager user.UserManagerInterface
+	userManager types.UserManagerInterface
 }
 
 // 注册信息
@@ -26,16 +28,16 @@ type RegistInfo struct {
 	Pwd string `json:"pwd"`
 }
 
-func newHandler() *UserHandler {
-	um := user.NewUserManager()
+func newHandler(conf *config.Config) *UserHandler {
+	um := user.NewUserManager(conf)
 	return &UserHandler{
 		userManager: um,
 	}
 }
 
 //InstallHandlers install Handlers
-func InstallHandlers(normal *gin.RouterGroup, auth *gin.RouterGroup) {
-	h := newHandler()
+func InstallHandlers(conf *config.Config, normal *gin.RouterGroup, auth *gin.RouterGroup) {
+	h := newHandler(conf)
 	normal.POST("/login", h.Login)
 	normal.POST("/register", h.RegisterUser)
 	auth.GET("/info", h.GetDataByTime)
@@ -43,10 +45,10 @@ func InstallHandlers(normal *gin.RouterGroup, auth *gin.RouterGroup) {
 
 // Register 注册用户
 func (u *UserHandler) RegisterUser(c *gin.Context) {
-	var registerInfo RegistInfo
+	var registerInfo types.RegisterReq
 	if c.BindJSON(&registerInfo) == nil {
-		err := u.userManager.Register(registerInfo.Phone, registerInfo.Pwd)
-		if err == nil {
+		status, err := u.userManager.Register(registerInfo)
+		if err == nil && status == true {
 			c.JSON(http.StatusOK, gin.H{
 				"status": 0,
 				"msg":    "注册成功！",
@@ -68,16 +70,15 @@ func (u *UserHandler) RegisterUser(c *gin.Context) {
 // LoginResult 登录结果结构
 type LoginResult struct {
 	Token string `json:"token"`
-	types.User
 }
 
 // Login 登录
 func (u *UserHandler) Login(c *gin.Context) {
 	var loginReq types.LoginReq
 	if c.BindJSON(&loginReq) == nil {
-		isPass, user, err := u.userManager.LoginCheck(loginReq)
+		isPass, err := u.userManager.LoginCheck(loginReq)
 		if isPass {
-			generateToken(c, user)
+			generateToken(c, loginReq)
 		} else {
 			c.JSON(http.StatusOK, gin.H{
 				"status": -1,
@@ -93,14 +94,12 @@ func (u *UserHandler) Login(c *gin.Context) {
 }
 
 // 生成令牌
-func generateToken(c *gin.Context, user types.User) {
+func generateToken(c *gin.Context, user types.LoginReq) {
 	j := &jwt.JWT{
 		SigningKey: []byte("lrx0014"),
 	}
 	claims := jwt.CustomClaims{
-		ID:    user.Id,
-		Name:  user.Name,
-		Phone: user.Phone,
+		ID: user.ID,
 		StandardClaims: jwtgo.StandardClaims{
 			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
 			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
@@ -121,7 +120,6 @@ func generateToken(c *gin.Context, user types.User) {
 	log.Println(token)
 
 	data := LoginResult{
-		User:  user,
 		Token: token,
 	}
 	c.JSON(http.StatusOK, gin.H{

@@ -22,7 +22,13 @@ func main() {
 	app.Version = "v2"
 	app.Action = func(c *cli.Context) {
 
-		conf := config.NewForEnv()
+		conf := &config.Config{}
+		path := os.Getenv("config")
+		if path == "" {
+			conf = config.NewForEnv()
+		} else {
+			conf = config.NewForINI(path)
+		}
 
 		s, err := server.New(conf)
 		if err != nil {
