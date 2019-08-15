@@ -1,0 +1,15 @@
+language: go
+
+go:
+  - 1.12.4
+
+before_deploy:
+  - go build -o backend cmd/backend/main.go
+
+deploy:
+  provider: releases
+  api_key: "$GITHUB_OAUTH_TOKEN"
+  file: "backend"
+  skip_cleanup: true
+  on:
+    tags: true
