@@ -4,12 +4,25 @@ go:
   - 1.12.4
 
 before_deploy:
-  - go build -o backend cmd/backend/main.go
+  - GOARCH=arm GOOS=linux   go build -o backend-linux-arm cmd/backend/main.go
+  - GOARCH=386 GOOS=linux   go build -o backend-linux-386 cmd/backend/main.go
+  - GOARCH=386 GOOS=darwin  go build -o backend-darwin-386 cmd/backend/main.go
+  - GOARCH=386 GOOS=windows go build -o backend-windows-386.exe cmd/backend/main.go
+  - GOARCH=amd64 GOOS=linux   go build -o backend-linux-amd64 cmd/backend/main.go
+  - GOARCH=amd64 GOOS=darwin  go build -o backend-darwin-amd64 cmd/backend/main.go
+  - GOARCH=amd64 GOOS=windows go build -o backend-windows-amd64.exe cmd/backend/main.go
 
 deploy:
   provider: releases
   api_key: "$GITHUB_OAUTH_TOKEN"
-  file: "backend"
+  file:
+    - backend-linux-arm
+    - backend-linux-386
+    - backend-darwin-386
+    - backend-windows-386.exe
+    - backend-linux-amd64
+    - backend-darwin-amd64
+    - backend-windows-amd64.exe
   skip_cleanup: true
   on:
     tags: true
