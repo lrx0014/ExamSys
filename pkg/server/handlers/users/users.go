@@ -20,14 +20,6 @@ type UserHandler struct {
 	userManager types.UserManagerInterface
 }
 
-// 注册信息
-type RegistInfo struct {
-	// 手机号
-	Phone string `json:"mobile"`
-	// 密码
-	Pwd string `json:"pwd"`
-}
-
 func newHandler(conf *config.Config) *UserHandler {
 	um := user.NewUserManager(conf)
 	return &UserHandler{
@@ -51,18 +43,18 @@ func (u *UserHandler) RegisterUser(c *gin.Context) {
 		if err == nil && status == true {
 			c.JSON(http.StatusOK, gin.H{
 				"status": 0,
-				"msg":    "注册成功！",
+				"msg":    "Registry Successfully",
 			})
 		} else {
 			c.JSON(http.StatusOK, gin.H{
 				"status": -1,
-				"msg":    "注册失败" + err.Error(),
+				"msg":    "Registry Failed: " + err.Error(),
 			})
 		}
 	} else {
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"status": -1,
-			"msg":    "解析数据失败！",
+			"msg":    "Body parsed failed",
 		})
 	}
 }
@@ -82,13 +74,13 @@ func (u *UserHandler) Login(c *gin.Context) {
 		} else {
 			c.JSON(http.StatusOK, gin.H{
 				"status": -1,
-				"msg":    "验证失败," + err.Error(),
+				"msg":    "Login Failed," + err.Error(),
 			})
 		}
 	} else {
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"status": -1,
-			"msg":    "json 解析失败",
+			"msg":    "Body parsed failed",
 		})
 	}
 }
@@ -122,11 +114,7 @@ func generateToken(c *gin.Context, user types.LoginReq) {
 	data := LoginResult{
 		Token: token,
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"status": 0,
-		"msg":    "登录成功！",
-		"data":   data,
-	})
+	c.JSON(http.StatusOK, data)
 	return
 }
 
@@ -136,7 +124,7 @@ func (u *UserHandler) GetDataByTime(c *gin.Context) {
 	if claims != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": 0,
-			"msg":    "token有效",
+			"msg":    "token is valid",
 			"data":   claims,
 		})
 	}

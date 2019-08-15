@@ -15,6 +15,7 @@ type RegisterReq struct {
 	Phone      string `json:"phone"`
 	Password   string `json:"password"`
 	Permission int    `json:"permission"`
+	Email      string `json:"email"`
 }
 
 // LoginReq 登录请求参数类
