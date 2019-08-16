@@ -1,12 +1,5 @@
 package types
 
-// UserManagerInterface defines the methods of user management.
-type UserManagerInterface interface {
-	Register(register RegisterReq) (bool, error)
-	CheckUser(id string) (bool, error)
-	LoginCheck(login LoginReq) (bool, error)
-}
-
 // User 用户类
 type RegisterReq struct {
 	ID         string `json:"id"`
@@ -27,4 +20,25 @@ type LoginReq struct {
 type LoginResp struct {
 	ID    string `json:"id"`
 	Token string `json:"token"`
+}
+
+type SingleChoiceReq struct {
+	Name    string `json:"name"`
+	Author  string `json:"author"`
+	Type    string `json:"type"`
+	Content string `json:"content"`
+	Choise1 string `json:"choise1"`
+	Choise2 string `json:"choise2"`
+	Choise3 string `json:"choise3"`
+	Choise4 string `json:"choise4"`
+	Choise5 string `json:"choise5"`
+	Choise6 string `json:"choise6"`
+	Choise7 string `json:"choise7"`
+	Choise8 string `json:"choise8"`
+	Answer  string `json:"answer"`
+}
+
+type SingleChoiceResp struct {
+	ID string `json:"id"`
+	SingleChoiceReq
 }

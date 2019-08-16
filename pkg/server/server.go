@@ -6,6 +6,8 @@ import (
 	_ "net/http/pprof"
 	"time"
 
+	"github.com/jinzhu/gorm"
+
 	log "github.com/golang/glog"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +15,7 @@ import (
 	"github.com/lrx0014/ExamSys/pkg/middleware/jwt"
 
 	"github.com/lrx0014/ExamSys/pkg/config"
+	questionshandlers "github.com/lrx0014/ExamSys/pkg/server/handlers/questions"
 	usershandlers "github.com/lrx0014/ExamSys/pkg/server/handlers/users"
 	versionhandlers "github.com/lrx0014/ExamSys/pkg/server/handlers/version"
 )
@@ -20,15 +23,17 @@ import (
 type Server struct {
 	cfg    *config.Config
 	engine *gin.Engine
+	db     *gorm.DB
 }
 
-func New(cfg *config.Config) (*Server, error) {
+func New(cfg *config.Config, db *gorm.DB) (*Server, error) {
 
 	engine := gin.Default()
 
 	s := &Server{
 		cfg:    cfg,
 		engine: engine,
+		db:     db,
 	}
 
 	s.InstallDefaultHandlers()
@@ -87,5 +92,6 @@ func (s *Server) InstallDefaultHandlers() {
 
 	// install user handlers
 	versionhandlers.InstallHandlers(authorized)
-	usershandlers.InstallHandlers(s.cfg, normal, authorized)
+	usershandlers.InstallHandlers(s.cfg, s.db, normal, authorized)
+	questionshandlers.InstallHandlers(s.cfg, s.db, authorized)
 }

@@ -2,7 +2,6 @@ package user
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/jinzhu/gorm"
 	"github.com/lrx0014/ExamSys/pkg/config"
@@ -18,12 +17,7 @@ type UserManager struct {
 
 var _ types.UserManagerInterface = &UserManager{}
 
-func NewUserManager(conf *config.Config) *UserManager {
-	db, err := initDB(conf)
-	if err != nil {
-		log.Errorf("Failed to connect to database: %v", err)
-		os.Exit(-1)
-	}
+func NewUserManager(conf *config.Config, db *gorm.DB) *UserManager {
 	return &UserManager{
 		DBClient: db,
 	}

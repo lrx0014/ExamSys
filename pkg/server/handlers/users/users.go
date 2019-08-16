@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/jinzhu/gorm"
+
 	"github.com/lrx0014/ExamSys/pkg/config"
 
 	"github.com/lrx0014/ExamSys/pkg/models/user"
@@ -20,16 +22,16 @@ type UserHandler struct {
 	userManager types.UserManagerInterface
 }
 
-func newHandler(conf *config.Config) *UserHandler {
-	um := user.NewUserManager(conf)
+func newHandler(conf *config.Config, db *gorm.DB) *UserHandler {
+	um := user.NewUserManager(conf, db)
 	return &UserHandler{
 		userManager: um,
 	}
 }
 
 //InstallHandlers install Handlers
-func InstallHandlers(conf *config.Config, normal *gin.RouterGroup, auth *gin.RouterGroup) {
-	h := newHandler(conf)
+func InstallHandlers(conf *config.Config, db *gorm.DB, normal *gin.RouterGroup, auth *gin.RouterGroup) {
+	h := newHandler(conf, db)
 	normal.POST("/login", h.Login)
 	normal.POST("/register", h.RegisterUser)
 	auth.GET("/info", h.GetDataByTime)
