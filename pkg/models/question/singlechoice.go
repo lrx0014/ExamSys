@@ -32,11 +32,7 @@ func (this *QuestionManager) Create(req types.SingleChoiceReq) (id string, err e
 		return "", fmt.Errorf("QuestionName [%s] already exist", req.Name)
 	}
 
-	uid, err := uuid.NewV4()
-	if err != nil {
-		log.Errorf("failed to generate uuid: %v", err)
-		return "", err
-	}
+	uid := uuid.NewV4()
 
 	questionItem := &SingleChoice{
 		ID:      uid.String(),
