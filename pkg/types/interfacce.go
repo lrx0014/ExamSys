@@ -4,7 +4,7 @@ package types
 type UserManagerInterface interface {
 	Register(register RegisterReq) (bool, error)
 	CheckUser(id string) (bool, error)
-	LoginCheck(login LoginReq) (bool, error)
+	LoginCheck(login LoginReq) (*LoginClaim, error)
 }
 
 type QuestionManagerInterface interface {

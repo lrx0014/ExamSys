@@ -85,19 +85,25 @@ func (u *UserManager) CheckUser(id string) (bool, error) {
 	return true, nil
 }
 
-func (u *UserManager) LoginCheck(login types.LoginReq) (bool, error) {
+func (u *UserManager) LoginCheck(login types.LoginReq) (*types.LoginClaim, error) {
+	result := &types.LoginClaim{}
+
 	if login.ID == "" || login.Password == "" {
-		return false, fmt.Errorf("id or password cannot be empty")
+		return result, fmt.Errorf("id or password cannot be empty")
 	}
 	var user User
 	err := u.DBClient.Where(&User{UserID: login.ID, Password: login.Password}).First(&user).Error
 	if gorm.IsRecordNotFoundError(err) {
-		return false, fmt.Errorf("password wrong or user not exist")
+		return result, fmt.Errorf("password wrong or user not exist")
 	}
 	if err != nil {
 		log.Errorf("Failed to get info of user: [%s]: %v", login.ID, err)
-		return false, err
+		return result, err
 	}
 
-	return true, nil
+	result.ID = user.UserID
+	result.Name = user.Name
+	result.Permission = user.Permission
+
+	return result, nil
 }

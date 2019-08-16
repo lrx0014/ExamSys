@@ -70,9 +70,9 @@ type LoginResult struct {
 func (u *UserHandler) Login(c *gin.Context) {
 	var loginReq types.LoginReq
 	if c.BindJSON(&loginReq) == nil {
-		isPass, err := u.userManager.LoginCheck(loginReq)
-		if isPass {
-			generateToken(c, loginReq)
+		claim, err := u.userManager.LoginCheck(loginReq)
+		if err == nil {
+			generateToken(c, claim)
 		} else {
 			c.JSON(http.StatusOK, gin.H{
 				"status": -1,
@@ -88,12 +88,14 @@ func (u *UserHandler) Login(c *gin.Context) {
 }
 
 // 生成令牌
-func generateToken(c *gin.Context, user types.LoginReq) {
+func generateToken(c *gin.Context, user *types.LoginClaim) {
 	j := &jwt.JWT{
 		SigningKey: []byte("lrx0014"),
 	}
 	claims := jwt.CustomClaims{
-		ID: user.ID,
+		ID:         user.ID,
+		Name:       user.Name,
+		Permission: user.Permission,
 		StandardClaims: jwtgo.StandardClaims{
 			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
 			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时

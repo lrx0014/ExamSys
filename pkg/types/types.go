@@ -22,6 +22,12 @@ type LoginResp struct {
 	Token string `json:"token"`
 }
 
+type LoginClaim struct {
+	ID         string `json:"id"`
+	Name       string `json:"username"`
+	Permission int    `json:"permission"`
+}
+
 type SingleChoiceReq struct {
 	Name    string `json:"name"`
 	Author  string `json:"author"`
