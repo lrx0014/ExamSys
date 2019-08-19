@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	log "github.com/golang/glog"
+	jwt "github.com/lrx0014/ExamSys/pkg/middleware/jwt"
 	"github.com/lrx0014/ExamSys/pkg/types"
 )
 
@@ -35,6 +36,12 @@ func InstallHandlers(conf *config.Config, db *gorm.DB, auth *gin.RouterGroup) {
 }
 
 func (h *QuestionHandler) Get(c *gin.Context) {
+	claims := c.MustGet("claims").(*jwt.CustomClaims)
+	if claims.Permission < 1 {
+		err := fmt.Errorf("permission denied: you are not allowed to access this resource")
+		handleError(c, 403, err)
+		return
+	}
 	name := c.Param("name")
 	result, err := h.questionManager.Get(name)
 	if err != nil {
@@ -46,6 +53,13 @@ func (h *QuestionHandler) Get(c *gin.Context) {
 }
 
 func (h *QuestionHandler) Update(c *gin.Context) {
+	claims := c.MustGet("claims").(*jwt.CustomClaims)
+	if claims.Permission < 1 {
+		err := fmt.Errorf("permission denied: you are not allowed to access this resource")
+		handleError(c, 403, err)
+		return
+	}
+
 	name := c.Param("name")
 	var req types.SingleChoiceReq
 	err := c.BindJSON(&req)
@@ -69,6 +83,13 @@ func (h *QuestionHandler) Update(c *gin.Context) {
 }
 
 func (h *QuestionHandler) Create(c *gin.Context) {
+	claims := c.MustGet("claims").(*jwt.CustomClaims)
+	if claims.Permission < 1 {
+		err := fmt.Errorf("permission denied: you are not allowed to access this resource")
+		handleError(c, 403, err)
+		return
+	}
+
 	var req types.SingleChoiceReq
 	err := c.BindJSON(&req)
 	if err != nil {
@@ -89,6 +110,13 @@ func (h *QuestionHandler) Create(c *gin.Context) {
 }
 
 func (h *QuestionHandler) Delete(c *gin.Context) {
+	claims := c.MustGet("claims").(*jwt.CustomClaims)
+	if claims.Permission < 1 {
+		err := fmt.Errorf("permission denied: you are not allowed to access this resource")
+		handleError(c, 403, err)
+		return
+	}
+
 	name := c.Param("name")
 	err := h.questionManager.Delete(name)
 	if err != nil {
