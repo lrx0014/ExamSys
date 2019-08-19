@@ -1,5 +1,7 @@
 package types
 
+import "time"
+
 // User 用户类
 type RegisterReq struct {
 	ID         string `json:"id"`
@@ -47,4 +49,20 @@ type SingleChoiceReq struct {
 type SingleChoiceResp struct {
 	ID string `json:"id"`
 	SingleChoiceReq
+}
+
+type QuestionSetBody struct {
+	SetName   string    `json:"setName"`
+	SetAuthor string    `json:"setAuthor"`
+	Type      string    `json:'type'`
+	SetItems  []SetItem `json:"setItems"`
+	CreatedAt time.Time `json:"create,omitempty"`
+	UpdatedAt time.Time `json:"update,omitempty"`
+}
+
+type SetItem struct {
+	QuestionName string    `json:"questionName"`
+	Score        int       `json:"score"`
+	CreatedAt    time.Time `json:"create,omitempty"`
+	UpdatedAt    time.Time `json:"update,omitempty"`
 }

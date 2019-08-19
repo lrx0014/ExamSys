@@ -13,3 +13,10 @@ type QuestionManagerInterface interface {
 	Delete(name string) error
 	Get(name string) (SingleChoiceResp, error)
 }
+
+type QuestionSetManagerInterface interface {
+	Create(set QuestionSetBody) (string, error)
+	Update(set QuestionSetBody) error
+	Delete(name string) error
+	Get(name string) (QuestionSetBody, error)
+}
