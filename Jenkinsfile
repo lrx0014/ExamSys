@@ -23,12 +23,12 @@ echo "build finished"'''
       }
       environment {
         username = 'lrx0014'
-        pwd = 'Dwmmsbc199656'
+        password = 'Dwmmsbc199656'
       }
       steps {
         sh '''echo "login into docker hub"
 
-docker login -u ${username} -p ${pwd}
+docker login -u ${username} -p ${password}
 
 echo "pushing image"
 
