@@ -6,9 +6,9 @@ pipeline {
 
   }
   stages {
-    stage('') {
+    stage('error') {
       steps {
-        sh '''docker build -t lrx0014/examsys:v1.0
+        sh '''docker build -t lrx0014/examsys:v1.0 .
 
 echo "build finished"'''
       }
