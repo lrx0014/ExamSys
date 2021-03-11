@@ -1,16 +1,23 @@
 pipeline {
   agent {
     node {
-      label 'jenkins-agent-docker-1'
+      label 'docker'
     }
 
   }
   stages {
-    stage('error') {
+    stage('build') {
       steps {
-        sh '''docker build -t lrx0014/examsys:v1.0 .
+        sh '''docker build -t lrx0014/examsys:auto-build .
 
 echo "build finished"'''
+      }
+    }
+
+    stage('push') {
+      steps {
+        sh '''docker push lrx0014/examsys:auto-build
+echo "push finished"'''
       }
     }
 
