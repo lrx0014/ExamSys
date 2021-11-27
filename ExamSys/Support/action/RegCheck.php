@@ -18,10 +18,10 @@ function isRepeat($UserId,$Level)
     $lv = "";
     $ky = "";
     if($Level==0){
-        $lv = "Student";
+        $lv = "student";
         $ky = "StuId";
     }else{
-        $lv = "Teacher";
+        $lv = "teacher";
         $ky = "TeacherId";
     }
     $SQL = "SELECT * FROM $lv WHERE $ky=$UserId;";

@@ -1,11 +1,5 @@
--- phpMyAdmin SQL Dump
--- version 4.7.4
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1:3306
--- Generation Time: 2018-01-30 08:40:18
--- 服务器版本： 5.7.19
--- PHP Version: 5.6.31
+CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';
+GRANT All privileges ON *.* TO 'admin'@'%';
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -16,11 +10,6 @@ SET time_zone = "+00:00";
 DROP DATABASE IF EXISTS examdb;  
 CREATE DATABASE examdb;  
 USE examdb;  
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `examdb`
@@ -63,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `loginhistory` (
   `stuid` int(11) DEFAULT NULL,
   `isTeacher` tinyint(1) DEFAULT '0',
   `LoginTime` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -93,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `question` (
   `QChoice` varchar(255) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`Qid`),
   KEY `TeacherId` (`TeacherId`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -109,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `question_sets` (
   `CreateTime` datetime DEFAULT NULL,
   `Author` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`QsetId`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -123,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `student` (
   `StuName` varchar(20) DEFAULT NULL,
   `StuPassword` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`StuId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -140,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `stugrade` (
   `Total` int(11) NOT NULL,
   `StartTime` datetime DEFAULT NULL,
   `FinishTime` datetime DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -167,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `teacher` (
   `TeacherName` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `TeacherPassword` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`TeacherId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -185,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `testhistory` (
   `TestTime` datetime DEFAULT NULL,
   KEY `StuId` (`StuId`),
   KEY `Qid` (`Qid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -206,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `totalscore` (
 --
 DROP TABLE IF EXISTS `gradeview`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `gradeview`  AS  select `stuview`.`StuId` AS `StuId`,`stuview`.`StuName` AS `StuName`,`stuview`.`lastTime` AS `lastTime`,`totalscore`.`total` AS `total` from (`stuview` join `totalscore`) where (`stuview`.`StuId` = `totalscore`.`StuId`) ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY INVOKER VIEW `gradeview`  AS  select `stuview`.`StuId` AS `StuId`,`stuview`.`StuName` AS `StuName`,`stuview`.`lastTime` AS `lastTime`,`totalscore`.`total` AS `total` from (`stuview` join `totalscore`) where (`stuview`.`StuId` = `totalscore`.`StuId`) ;
 
 -- --------------------------------------------------------
 
@@ -215,7 +204,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `gradevi
 --
 DROP TABLE IF EXISTS `lasttimeview`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `lasttimeview`  AS  select `loginhistory`.`stuid` AS `stuid`,max(`loginhistory`.`LoginTime`) AS `lastTime` from `loginhistory` where (`loginhistory`.`isTeacher` = 0) group by `loginhistory`.`stuid` ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY INVOKER VIEW `lasttimeview`  AS  select `loginhistory`.`stuid` AS `stuid`,max(`loginhistory`.`LoginTime`) AS `lastTime` from `loginhistory` where (`loginhistory`.`isTeacher` = 0) group by `loginhistory`.`stuid` ;
 
 -- --------------------------------------------------------
 
@@ -224,7 +213,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `lasttim
 --
 DROP TABLE IF EXISTS `nextquestion`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `nextquestion`  AS  select `question`.`Qid` AS `Qid` from (`question` left join (select `testhistory`.`Qid` AS `i` from `testhistory`) `t1` on((`question`.`Qid` = `t1`.`i`))) where isnull(`t1`.`i`) ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY INVOKER VIEW `nextquestion`  AS  select `question`.`Qid` AS `Qid` from (`question` left join (select `testhistory`.`Qid` AS `i` from `testhistory`) `t1` on((`question`.`Qid` = `t1`.`i`))) where isnull(`t1`.`i`) ;
 
 -- --------------------------------------------------------
 
@@ -233,7 +222,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `nextque
 --
 DROP TABLE IF EXISTS `stuview`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `stuview`  AS  select `student`.`StuId` AS `StuId`,`student`.`StuName` AS `StuName`,`lasttimeview`.`lastTime` AS `lastTime` from (`student` join `lasttimeview`) where (`student`.`StuId` = `lasttimeview`.`stuid`) ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY INVOKER VIEW `stuview`  AS  select `student`.`StuId` AS `StuId`,`student`.`StuName` AS `StuName`,`lasttimeview`.`lastTime` AS `lastTime` from (`student` join `lasttimeview`) where (`student`.`StuId` = `lasttimeview`.`stuid`) ;
 
 -- --------------------------------------------------------
 
@@ -242,7 +231,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `stuview
 --
 DROP TABLE IF EXISTS `totalscore`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`Exam`@`%` SQL SECURITY DEFINER VIEW `totalscore`  AS  select `testhistory`.`StuId` AS `StuId`,sum(`testhistory`.`StuScore`) AS `total` from `testhistory` group by `testhistory`.`StuId` ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY INVOKER VIEW `totalscore`  AS  select `testhistory`.`StuId` AS `StuId`,sum(`testhistory`.`StuScore`) AS `total` from `testhistory` group by `testhistory`.`StuId` ;
 
 --
 -- 限制导出的表
@@ -263,6 +252,3 @@ ALTER TABLE `testhistory`
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

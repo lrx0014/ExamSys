@@ -43,7 +43,7 @@ function DeleteFromQuestion($targetid)
 {
     $target = $targetid;
     $target = str_replace('Q','',$target);
-    $SQL1 = "DELETE FROM Question WHERE Qid=$target;";
+    $SQL1 = "DELETE FROM question WHERE Qid=$target;";
     $SQL2 = "DELETE FROM testhistory WHERE Qid=$target;";
     $SQL3 = "UPDATE question_sets SET Qinclude=REPLACE(Qinclude,$target,'') WHERE Qinclude LIKE 'Q$target';";
 

@@ -25,7 +25,7 @@ $CountSQL = "SELECT COUNT(*) as num From question WHERE Qid=ANY(SELECT Qid FROM 
 
 $DONE = "SELECT COUNT(*) as done FROM testhistory WHERE stuid=$Userid;";
 $ALL = "SELECT COUNT(*) as allQues FROM question;";
-$SCORE = "SELECT total FROM GradeView WHERE stuid=$Userid;";
+$SCORE = "SELECT total FROM gradeview WHERE stuid=$Userid;";
 ***/
 
 $CONDITONS = "";
@@ -51,7 +51,7 @@ $CountSQL = "SELECT COUNT(*) as num From question WHERE Qid=ANY(SELECT Qid FROM 
 
 $DONE = "SELECT COUNT(*) as done FROM testhistory WHERE stuid=$Userid AND Qset=$setid;";
 $ALL = "SELECT COUNT(*) as allQues FROM question WHERE Qid IN($CONDITONS);";
-$SCORE = "SELECT total FROM GradeView WHERE stuid=$Userid;";
+$SCORE = "SELECT total FROM gradeview WHERE stuid=$Userid;";
 
 $_d = mysql_fetch_array(mysql_query($DONE)); 
 $_a = mysql_fetch_array(mysql_query($ALL)); 

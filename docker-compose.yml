@@ -1,0 +1,26 @@
+version: '3'
+services:
+  db:
+    image: 'mysql/mysql-server:5.7'
+    restart: always
+    container_name: mysql
+    volumes:
+      - ./my.cnf:/etc/my.cnf
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    ports:
+      - '3306:3306'
+  examsys:
+    image: 'lrx0014/examsys:php56'
+    restart: always
+    container_name: examsys
+    environment:
+      - DB_ADDR=db:3306
+      - DB_USER=admin
+      - DB_PWD=admin
+    ports:
+      - '80:80'
+    depends_on:
+      - db
+volumes:
+  data:
+    driver: local

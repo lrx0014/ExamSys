@@ -16,7 +16,7 @@
 
         $setid = $_SESSION['setid'];
 
-        $historySQL = "INSERT INTO testhistory VALUES($StuId,$setid,$Qid,'$StuChoice',$StuScore,NOW());";
+        $historySQL = "insert into testhistory VALUES($StuId,$setid,$Qid,'$StuChoice',$StuScore,NOW());";
 
         $r = mysql_query($historySQL);
         if($r){

@@ -23,7 +23,7 @@ $(document).ready(function () {
         {
             alert("请先选择题库！！");
         }else{
-            window.location="test.php?setid=" + selected_set;
+            window.location="Test.php?setid=" + selected_set;
         }
     });
 });

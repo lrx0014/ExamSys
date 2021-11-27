@@ -10,7 +10,7 @@
     $QScore = $_POST['QScore'];
     $TeacherId = $_SESSION['UserId'];
 
-    $RecordSQL = "INSERT INTO Question VALUES(null,'$QContent','$QCorrect',$QScore,$TeacherId,NOW(),'$QChoice');";
+    $RecordSQL = "insert into question VALUES(null,'$QContent','$QCorrect',$QScore,$TeacherId,NOW(),'$QChoice');";
 
     $res = mysql_query($RecordSQL);
 

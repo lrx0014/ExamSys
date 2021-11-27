@@ -16,8 +16,8 @@
         $UserPassword = $_POST['Password'];
         $UserLevel = $_POST['UserLevel'];
 
-        $StuSignUp = "Insert into student values($UserId,'$UserName','$UserPassword');";
-        $TecherSignUp = "Insert into teacher values($UserId,'$UserName','$UserPassword');";
+        $StuSignUp = "insert into student values($UserId,'$UserName','$UserPassword');";
+        $TecherSignUp = "insert into teacher values($UserId,'$UserName','$UserPassword');";
         if($UserLevel==0)
         {
             $res = mysql_query($StuSignUp);

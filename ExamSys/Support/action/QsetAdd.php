@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL & ~E_DEPRECATED);
+error_reporting(E_ALL & ~E_ERROR);
 include_once("connect.php");
 session_start();
 
@@ -64,7 +64,7 @@ function ReadTable()
 
 function CreateSet($Name,$Qid,$Author)
 {
-    $SQL = "INSERT INTO question_sets(QsetName,Qinclude,CreateTime,Author) VALUES('$Name','$Qid',NOW(),'$Author');";
+    $SQL = "insert into question_sets(QsetName,Qinclude,CreateTime,Author) VALUES('$Name','$Qid',NOW(),'$Author');";
     $CreateRes = mysql_query($SQL);
     if($CreateRes)
     {

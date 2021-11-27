@@ -3,7 +3,7 @@
 session_start();
 
 header("Content-Type:text/html;charset=utf-8");
-error_reporting(0);
+error_reporting(E_ALL & ~E_ERROR);
     //连接数据库
 //mysql_connect('127.0.0.1', 'Exam', 'exam1234');
 //mysql_select_db('examdb');
@@ -34,7 +34,7 @@ $sql1 = "SELECT question.Qid,question.QScore,question.QAnswer,question.Qcontent,
 
 $sql2 = "SELECT count(*) count FROM testhistory WHERE StuId=$UserId $CONDITIONS;";
 
-$sql3 = "SELECT total FROM GradeView WHERE StuId=$UserId;";
+$sql3 = "SELECT total FROM gradeview WHERE StuId=$UserId;";
 
 $sql4 = "SELECT MAX(loginTime) as loginTime FROM loginhistory WHERE Stuid=$UserId and isTeacher=0;";
 

@@ -1,20 +1,17 @@
 ExamSys在线考试系统(WEB)
 ===========================
-**NOTE:此版本现已启用Docker技术，支持通过Docker实现持续集成和持续部署，甚至是一键自动部署**
+**快速开始**
+
+请先安装docker和docker-compose，然后：
       
-在安装有Docker的机器上，进入项目根目录(Dockerfile所在目录)执行: 
 ```shell
-  Docker build -t examsys/examsys:v1 .
+  docker-compose up -d
 ``` 
-即可获得Docker镜像，然后执行： 
+
+即可一键部署ExamSys考试系统, 浏览器访问以下地址即可进入ExamSys主页(数据库初始化需要一段时间)：
 ```shell
-  Docker run -it -p 80:80 -p 3306:3306 -d examsys/examsys:v1
-``` 
-即可一键部署ExamSys考试系统, 浏览器访问以下地址即可进入ExamSys主页：
-```shell
-localhost:80
+http://localhost:80
 ```
-**从此告别手动部署的繁琐！！**
 
 <hr>
 
@@ -24,7 +21,7 @@ ExamSys是一个基于Web的在线考试系统，前端使用HTML+JS+CSS构建�
 
   Author  | Email
   ------------- | -------------
- Ryann  | lrx0014@hotmail.com
+ Ryan  | lrx0014@hotmail.com
 
 开发使用的是 **WampServer 3.1.0 (php 5.6.31 + mysql 5.7.19)** <br>
 引用了JQuery和Bootstrap框架 <br>
@@ -32,6 +29,13 @@ ExamSys是一个基于Web的在线考试系统，前端使用HTML+JS+CSS构建�
 
 Change Logs
 -----------
+### ExamSys v1.0.0 (2021/11/27)
+    
+    可能是最后一次维护
+* 添加docker-compose和k8s部署示例
+* 修复docker镜像bug
+
+  <hr>
 ### ExamSys v0.2.1 (2018/05/19)
     
 * 项目Docker化，提供容器技术支持

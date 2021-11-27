@@ -3,7 +3,7 @@
 session_start();
 
 header("Content-Type:text/html;charset=utf-8");
-error_reporting(0);
+error_reporting(E_ALL & ~E_ERROR);
     //连接数据库
 include_once("connect.php");
 mysql_query('set names utf8');
@@ -67,19 +67,19 @@ if($_POST['setName']=="all")
     $WITH_SET = "";
     $SET_CNT  = "";
 }else{
-    $WITH_SET = "AND Question.Qid IN ($CONDITONS)";
-    $SET_CNT  = "WHERE Question.Qid IN ($CONDITONS)";
+    $WITH_SET = "AND question.Qid IN ($CONDITONS)";
+    $SET_CNT  = "WHERE question.Qid IN ($CONDITONS)";
 }
 
 
 $SQL = "SELECT Qid,Qcontent,QChoice,QAnswer,QScore,CreateTime,TeacherName 
-        FROM Question,Teacher WHERE Question.TeacherId=Teacher.TeacherId $WITH_SET
+        FROM question,teacher WHERE question.TeacherId=teacher.TeacherId $WITH_SET
         LIMIT $offset,$perPageNums;";
 
         //echo $SQL;
 
 
-$sql2 = "SELECT COUNT(*) as total FROM Question $SET_CNT;";
+$sql2 = "SELECT COUNT(*) as total FROM question $SET_CNT;";
 
 $resource1 = mysql_query($SQL);
 

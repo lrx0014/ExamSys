@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL & ~E_DEPRECATED);
+error_reporting(E_ALL & ~E_ERROR);
 include_once("connect.php");
 session_start();
 $UserId = "";
@@ -12,8 +12,8 @@ if(isset($_POST['UserId']) && isset($_POST['UserPassword']) && isset($_POST['Use
     $UserLevel    = $_POST['UserLevel'];
 }
 
-$LoginStuSQL     = "SELECT StuName,StuPassword,StuId FROM Student WHERE StuId='".$UserId."';";
-$LoginTeacherSQL = "SELECT TeacherName,TeacherId,TeacherPassword FROM Teacher WHERE TeacherId='".$UserId."';";
+$LoginStuSQL     = "SELECT StuName,StuPassword,StuId FROM student WHERE StuId='".$UserId."';";
+$LoginTeacherSQL = "SELECT TeacherName,TeacherId,TeacherPassword FROM teacher WHERE TeacherId='".$UserId."';";
 $check = "";
 $name = "";
 $path = "";
@@ -29,7 +29,7 @@ if($UserLevel==0){
     $path = "Teacher.php";
 }
 
-$LoginInfo = "INSERT INTO loginhistory VALUES($UserId,$UserLevel,NOW());";
+$LoginInfo = "insert into loginhistory VALUES($UserId,$UserLevel,NOW());";
 
 if($res){
     $arr = mysql_fetch_array($res);
