@@ -10,12 +10,23 @@ ExamSys在线考试系统(WEB)
 
 即可一键部署ExamSys考试系统, 浏览器访问以下地址即可进入ExamSys主页(数据库初始化需要一段时间)：
 ```shell
-http://localhost:80
+http://localhost
 ```
 
-<hr>
+在k8s上部署：
+```shell
+kubectl -n <your_ns> create -f k8s-all.yaml
+```
 
-ExamSys is an online exam system based on Web; the front end is constructed by HTML+JS+CSS. The back end is realized by PHP-MySL with the application of BootStrap and JQuery framework and AJAX JSON technologies; the project constructs a simple and easy user interface, which is divided into two parts of student and teacher terminal; after logging in, students can choose freely random question bank for exercise, and they can check their performance; teacher accounts can make corresponding management over question bank, details, and performance; the system supports all kinds of question types (multiple choice, blank filling and judging) and can mark automatically the objective questions. 
+**给想抄作业的同学们**
+
+这个项目已经年代久远，基本不会再维护了
+
+它延伸自某次课设任务，几乎没有使用那些高级php框架、实现简单粗暴，适合本科入门的同学用作参考
+
+ps. 作业还是要自己写哦 ;)
+
+<hr>
 
 ExamSys是一个基于Web的在线考试系统，前端使用HTML+JS+CSS构建，后端使用PHP+MySQL实现，应用了BootStrap和JQuery框架以及AJAX、JSON等技术；程序构建了一个清爽简单的用户界面，分为学生端和教师端两部分，学生登录系统后可以自由选择任意题库进行答题练习，也可随时查看自己的答题情况，教师账户可对题库、题目细节、学生成绩等进行相应的管理操作。系统支持各种主流题型(单选多选、填空、判断)，对客观题可以进行自动判分 。设计还有许多不如意的地方, 以后会慢慢改进, 慢慢完善这个系统, 使其可以满足大部分在线测试的需求. <br>
 
